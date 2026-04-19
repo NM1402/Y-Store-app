@@ -376,14 +376,24 @@
 /* ========== CHECKOUT / NP PICKER — зберігаємо оригінальні висоти ========== */
 #tma-root .np-picker__trigger,
 #tma-root .checkout-v3__input,
-#tma-root .np-sheet__search-input,
-#tma-root input[type="tel"],
-#tma-root input[type="text"],
-#tma-root input[type="email"] {
+#tma-root .np-sheet__search-input {
   min-height: 52px !important;
   font-size: 16px !important;
   line-height: 1.35 !important;
   padding: 0 16px !important;
+}
+
+/* Загальні висоти для інпутів checkout/auth — БЕЗ горизонтального padding
+   (компонентний CSS сам керує padding-left/right, особливо коли є іконки) */
+#tma-root .checkout-v3 input[type="tel"],
+#tma-root .checkout-v3 input[type="text"],
+#tma-root .checkout-v3 input[type="email"],
+#tma-root .auth-form input[type="tel"],
+#tma-root .auth-form input[type="text"],
+#tma-root .auth-form input[type="email"] {
+  min-height: 52px;
+  font-size: 16px;
+  line-height: 1.35;
 }
 
 #tma-root .np-picker {

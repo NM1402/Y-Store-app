@@ -98,3 +98,8 @@
   - 3 діаграми flow (каталог, cash order, card order)
   - Smoke-test команди
   - 18-точковий чекбокс готовності
+
+## Session 6 — Search icon overlap + Product page deduplication (2026-04-19)
+- ✅ **Fix Search icon overlap**: responsive-fix застосовував `padding: 0 16px !important` до ВСІХ input[type=text], що overрайдило `.search-v2__input { padding-left: 48px }` → іконка лупи накладалась на placeholder. Рішення: scoped правило тільки до `.checkout-v3` і `.auth-form`
+- ✅ **Fix corrupted Search-v2.jsx**: orphan JSX fragments рендерилися як текст (`); }`, `</Page>`) — перезаписав файл чисто
+- ✅ **Merge Product sections**: видалено окремий блок "Доставка" з дублем Нової Пошти. Залишено ОДИН блок "Умови покупки": Швидка доставка + Самовивіз + Повернення 14 днів + Зручна оплата + note про безкоштовну доставку від 2000₴

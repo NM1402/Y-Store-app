@@ -9,7 +9,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Star, Shield, RotateCcw, TruckIcon, Store, CheckCircle, Package, Flame, AlertTriangle, CreditCard } from 'lucide-react';
+import { ChevronLeft, Star, Shield, RotateCcw, Store, CheckCircle, Package, Flame, AlertTriangle, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../lib/api-client';
 import useCartStore from '../store/cart';
@@ -264,33 +264,7 @@ export default function ProductV3() {
             </section>
           )}
 
-          {/* SECTION: DELIVERY */}
-          <section className="product-v3__section">
-            <h3 className="product-v3__section-title">
-              <TruckIcon size={18} /><span>Доставка</span>
-            </h3>
-            <div className="product-v3__row">
-              <div className="product-v3__row-icon"><Package size={20} /></div>
-              <div className="product-v3__row-body">
-                <div className="product-v3__row-title">Нова Пошта</div>
-                <div className="product-v3__row-desc">1–3 дні • За тарифами перевізника</div>
-              </div>
-            </div>
-            <div className="product-v3__row">
-              <div className="product-v3__row-icon"><Store size={20} /></div>
-              <div className="product-v3__row-body">
-                <div className="product-v3__row-title">Самовивіз</div>
-                <div className="product-v3__row-desc">м. Київ • Безкоштовно</div>
-              </div>
-            </div>
-            {product.price >= 2000 && (
-              <div className="product-v3__note product-v3__note--success">
-                🎉 Безкоштовна доставка від 2000 ₴
-              </div>
-            )}
-          </section>
-
-          {/* SECTION: GUARANTEES */}
+          {/* SECTION: УМОВИ ПОКУПКИ (об'єднана — доставка + гарантії + оплата) */}
           <section className="product-v3__section">
             <h3 className="product-v3__section-title">
               <Shield size={18} /><span>Умови покупки</span>
@@ -300,6 +274,13 @@ export default function ProductV3() {
               <div className="product-v3__row-body">
                 <div className="product-v3__row-title">Швидка доставка</div>
                 <div className="product-v3__row-desc">Новою Поштою 1–2 дні по Україні</div>
+              </div>
+            </div>
+            <div className="product-v3__row">
+              <div className="product-v3__row-icon"><Store size={20} /></div>
+              <div className="product-v3__row-body">
+                <div className="product-v3__row-title">Самовивіз</div>
+                <div className="product-v3__row-desc">м. Київ • Безкоштовно</div>
               </div>
             </div>
             <div className="product-v3__row">
@@ -316,6 +297,11 @@ export default function ProductV3() {
                 <div className="product-v3__row-desc">Карткою онлайн або при отриманні</div>
               </div>
             </div>
+            {product.price >= 2000 && (
+              <div className="product-v3__note product-v3__note--success">
+                🎉 Безкоштовна доставка від 2000 ₴
+              </div>
+            )}
           </section>
 
           {/* SECTION: DESCRIPTION */}
