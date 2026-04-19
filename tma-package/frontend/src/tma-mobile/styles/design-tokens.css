@@ -1,0 +1,153 @@
+/**
+ * Y-Store TMA - Design System v2.0
+ * Full redesign: modern soft commerce, mobile-first, Telegram-native
+ */
+
+:root {
+  /* ========== COLORS ========== */
+  
+  /* Base Backgrounds */
+  --color-bg-base: #F6F7FB;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-subtle: #EEF2F6;
+  --color-bg-elevated: rgba(255, 255, 255, 0.86);
+
+  /* Brand */
+  --color-brand-primary: #0EA5A4;
+  --color-brand-primary-pressed: #0B8E8D;
+  --color-brand-soft: #DDF6F5;
+  --color-brand-secondary: #2563EB;
+
+  /* Text */
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #667085;
+  --color-text-tertiary: #98A2B3;
+  --color-text-inverse: #FFFFFF;
+
+  /* Semantic */
+  --color-success: #16A34A;
+  --color-success-bg: #EAF8EE;
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FFF6E5;
+  --color-danger: #EF4444;
+  --color-danger-bg: #FDECEC;
+
+  /* Borders */
+  --color-border-light: #E7ECF2;
+  --color-border-medium: #D7DEE7;
+
+  /* ========== RADIUS ========== */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* ========== SPACING ========== */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* ========== SHADOWS ========== */
+  --shadow-card: 0 8px 24px rgba(16, 24, 40, 0.06);
+  --shadow-floating: 0 12px 32px rgba(16, 24, 40, 0.10);
+  --shadow-soft: 0 2px 8px rgba(16, 24, 40, 0.04);
+
+  /* ========== TYPOGRAPHY ========== */
+  
+  /* Headings */
+  --text-h1-size: 34px;
+  --text-h1-line: 40px;
+  --text-h1-weight: 700;
+
+  --text-h2-size: 28px;
+  --text-h2-line: 34px;
+  --text-h2-weight: 700;
+
+  --text-h3-size: 18px;
+  --text-h3-line: 24px;
+  --text-h3-weight: 600;
+
+  --text-h4-size: 16px;
+  --text-h4-line: 22px;
+  --text-h4-weight: 600;
+
+  /* Body */
+  --text-body-size: 15px;
+  --text-body-line: 22px;
+  --text-body-weight: 500;
+
+  --text-body-secondary-size: 14px;
+  --text-body-secondary-line: 20px;
+  --text-body-secondary-weight: 400;
+
+  --text-caption-size: 12px;
+  --text-caption-line: 16px;
+  --text-caption-weight: 500;
+
+  /* Price */
+  --text-price-main-size: 28px;
+  --text-price-main-line: 32px;
+  --text-price-main-weight: 700;
+
+  --text-price-card-size: 24px;
+  --text-price-card-line: 28px;
+  --text-price-card-weight: 700;
+
+  --text-price-old-size: 14px;
+  --text-price-old-line: 20px;
+  --text-price-old-weight: 500;
+
+  /* ========== LAYOUT ========== */
+  --layout-page-padding: 16px;
+  --layout-section-gap: 24px;
+  --layout-card-padding: 16px;
+  --layout-list-gap: 12px;
+
+  /* ========== Z-INDEX ========== */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 50;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+
+  /* ========== TRANSITIONS ========== */
+  --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ========== TELEGRAM THEME INTEGRATION ========== */
+  --tg-theme-bg-color: var(--color-bg-base);
+  --tg-theme-text-color: var(--color-text-primary);
+  --tg-theme-hint-color: var(--color-text-secondary);
+  --tg-theme-link-color: var(--color-brand-primary);
+  --tg-theme-button-color: var(--color-brand-primary);
+  --tg-theme-button-text-color: var(--color-text-inverse);
+  --tg-theme-secondary-bg-color: var(--color-bg-surface);
+}
+
+/* Dark mode support (Telegram native) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-base: #0F1419;
+    --color-bg-surface: #1A1F28;
+    --color-bg-subtle: #252D38;
+    --color-bg-elevated: rgba(26, 31, 40, 0.86);
+
+    --color-text-primary: #E8EAF6;
+    --color-text-secondary: #98A2B3;
+    --color-text-tertiary: #667085;
+
+    --color-border-light: #2D3748;
+    --color-border-medium: #3D4A5C;
+
+    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.3);
+    --shadow-floating: 0 12px 32px rgba(0, 0, 0, 0.4);
+    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+}

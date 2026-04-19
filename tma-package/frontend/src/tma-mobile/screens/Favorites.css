@@ -1,0 +1,34 @@
+/**
+ * Favorites Screen CSS
+ */
+
+.favorites {
+  padding: var(--space-16);
+  padding-bottom: 100px;
+}
+
+.favorites__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-12);
+}
+
+/* ========== SKELETON ========== */
+.favorites__skeleton {
+  padding: var(--space-16);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-12);
+}
+
+.favorites__skeleton-item {
+  aspect-ratio: 1;
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-lg);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

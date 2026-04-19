@@ -1,0 +1,209 @@
+/* Order Success / Status screen */
+
+.order-success {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 20px;
+  background: #f7f8fa;
+}
+
+.order-success__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fadeInUp 0.4s ease;
+  padding: 12px 4px 32px;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.order-success__icon {
+  margin-bottom: 20px;
+  animation: scaleIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+}
+.order-success__icon--success {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+.order-success__icon--pending {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+.order-success__icon--failed {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+.order-success__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0b1220;
+  margin: 0 0 10px;
+  letter-spacing: -0.3px;
+}
+
+.order-success__message {
+  font-size: 15px;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 18px;
+  max-width: 320px;
+}
+
+.order-success__order-num {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #f1f5f9;
+  color: #334155;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.order-success__info {
+  width: 100%;
+  max-width: 360px;
+  margin-top: 4px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+.order-success__info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #334155;
+}
+
+/* ---- Pending state amount card ---- */
+.order-success__amount {
+  width: 100%;
+  max-width: 360px;
+  margin: 8px 0 20px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  text-align: center;
+  pointer-events: none; /* informational, не кнопка */
+}
+.order-success__amount-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.order-success__amount-value {
+  margin-top: 4px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0b1220;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- CTAs inside content ---- */
+.order-success__pay-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+  height: 54px;
+  margin-top: 8px;
+  background: #0ea5a4;
+  color: #ffffff;
+  border: 0;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(14, 165, 164, 0.28);
+  transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
+}
+.order-success__pay-btn:active {
+  transform: translateY(1px);
+  background: #0d9795;
+}
+
+.order-success__check-btn {
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 360px;
+  height: 46px;
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.order-success__check-btn:active { background: #e2e8f0; }
+.order-success__check-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.order-success__hint {
+  max-width: 340px;
+  margin: 10px auto 0;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* ---- Bottom actions ---- */
+.order-success__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.order-success__btn {
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.order-success__btn--primary {
+  background: #0ea5a4;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(14, 165, 164, 0.24);
+}
+.order-success__btn--primary:active { background: #0d9795; transform: translateY(1px); }
+
+.order-success__btn--secondary {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+.order-success__btn--secondary:active { background: #e2e8f0; }

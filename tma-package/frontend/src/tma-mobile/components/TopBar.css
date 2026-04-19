@@ -1,0 +1,109 @@
+/**
+ * TopBar Styles - Premium header with ROUNDED back button
+ */
+
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-12) var(--space-16);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.top-bar__left,
+.top-bar__right {
+  flex: 0 0 auto;
+  min-width: 60px;
+}
+
+.top-bar__left {
+  display: flex;
+  align-items: center;
+}
+
+.top-bar__center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-bar__logo {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #0EA5A4 0%, #0D8B8A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  text-shadow: 0 4px 8px rgba(14, 165, 164, 0.2);
+  filter: drop-shadow(0 2px 4px rgba(14, 165, 164, 0.15));
+}
+
+.top-bar__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+.top-bar__back,
+.top-bar__cart {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-radius: var(--radius-full);
+}
+
+.top-bar__back:active,
+.top-bar__cart:active {
+  transform: scale(0.9);
+  background: var(--color-surface);
+}
+
+.top-bar__back svg,
+.top-bar__cart svg {
+  flex-shrink: 0;
+}
+
+.top-bar__cart {
+  position: relative;
+}
+
+.top-bar__cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: #EF4444;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.top-bar__right {
+  display: flex;
+  justify-content: flex-end;
+}

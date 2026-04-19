@@ -1,0 +1,107 @@
+/**
+ * Bottom Navigation v2.0 Styles
+ * Floating glass-like surface with active pill
+ */
+
+.bottom-nav-v2 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  padding: 0 var(--space-12) env(safe-area-inset-bottom);
+  padding-bottom: calc(var(--space-12) + env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.bottom-nav-v2__container {
+  background: var(--color-bg-elevated);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-floating);
+  pointer-events: auto;
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(12px)) {
+  .bottom-nav-v2__container {
+    background: var(--color-bg-surface);
+  }
+}
+
+.bottom-nav-v2__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--space-8) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  position: relative;
+  min-height: 56px;
+  max-width: 80px;
+}
+
+/* Active pill highlight */
+.bottom-nav-v2__item--active {
+  background: var(--color-brand-soft);
+}
+
+.bottom-nav-v2__icon {
+  color: var(--color-text-tertiary);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.bottom-nav-v2__item--active .bottom-nav-v2__icon {
+  color: var(--color-brand-primary);
+  transform: translateY(-2px);
+}
+
+.bottom-nav-v2__label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  transition: color var(--transition-fast);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.bottom-nav-v2__item--active .bottom-nav-v2__label {
+  color: var(--color-brand-primary);
+  font-weight: 600;
+}
+
+.bottom-nav-v2__item:active {
+  transform: scale(0.96);
+}
+
+/* Badge */
+.bottom-nav-v2__badge {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  min-width: 18px;
+  height: 18px;
+  background: var(--color-danger);
+  color: white;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}

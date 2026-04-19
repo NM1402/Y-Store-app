@@ -1,0 +1,95 @@
+.np-ac {
+  position: relative;
+  width: 100%;
+}
+
+.np-ac__input {
+  width: 100%;
+}
+
+.np-ac__spinner {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(14, 165, 164, 0.25);
+  border-top-color: var(--color-brand-primary);
+  border-radius: 50%;
+  animation: np-spin 0.85s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes np-spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+.np-ac__list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+  z-index: 200;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.np-ac__item {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color 0.14s ease, transform 0.14s ease;
+}
+
+.np-ac__item:active { transform: scale(0.98); }
+
+.np-ac__item--active,
+.np-ac__item:hover {
+  background: var(--color-brand-soft);
+}
+
+.np-ac__item strong {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.np-ac__item small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.np-ac__empty {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  z-index: 200;
+}

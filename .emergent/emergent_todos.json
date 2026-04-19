@@ -1,42 +1,38 @@
 [
   {
-    "content": "Audit: backend structure and routes",
+    "content": "Create /app/tma-package/ root structure",
     "status": "completed"
   },
   {
-    "content": "Audit: TMA routes (/api/tma/*) — endpoints, auth, business logic",
+    "content": "Copy backend code (without __pycache__, venv)",
     "status": "completed"
   },
   {
-    "content": "Audit: WayForPay integration (routes, provider, webhook, HMAC)",
+    "content": "Copy frontend code (without node_modules, build)",
     "status": "completed"
   },
   {
-    "content": "Audit: Nova Poshta integration (BFF, TTN creation, sender setup)",
+    "content": "Copy config files (supervisor, nginx example)",
     "status": "completed"
   },
   {
-    "content": "Audit: Data models (products, categories, orders, users)",
+    "content": "Create .env.example with all required keys",
     "status": "completed"
   },
   {
-    "content": "Audit: Frontend TMA structure (screens, store, api-client)",
+    "content": "Create deploy.sh + smoke_test.sh scripts",
     "status": "completed"
   },
   {
-    "content": "Audit: Telegram bot — commands, menu-button, alerts",
+    "content": "Copy docs (INTEGRATION_AUDIT, HANDOFF_CONFIRMATION, etc.)",
     "status": "completed"
   },
   {
-    "content": "Identify all integration touchpoints with 'main site' backend",
+    "content": "Write master README.md with map of everything",
     "status": "completed"
   },
   {
-    "content": "Write comprehensive INTEGRATION_AUDIT.md — structure, flows, dev checklist",
-    "status": "completed"
-  },
-  {
-    "content": "Create skeleton site_adapter.py for dev to fill",
+    "content": "Verify: current app still works, package is self-contained",
     "status": "completed"
   }
 ]

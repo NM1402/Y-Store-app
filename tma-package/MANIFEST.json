@@ -1,0 +1,79 @@
+{
+  "name": "y-store-tma",
+  "version": "1.0.0",
+  "description": "Y-Store Telegram Mini App — self-contained integration package",
+  "bot_username": "Ystore_app_bot",
+  "bot_id": "8524617770",
+  "created_at": "2026-04-19",
+  "stack": {
+    "backend": {
+      "runtime": "Python 3.11+",
+      "framework": "FastAPI 0.118",
+      "database": "MongoDB 6+ (Motor async)",
+      "bot_lib": "aiogram 3.27",
+      "http_client": "httpx 0.28"
+    },
+    "frontend": {
+      "runtime": "Node.js 18+",
+      "framework": "React 19 (CRA + craco)",
+      "state": "Zustand 5",
+      "router": "react-router-dom 7",
+      "icons": "lucide-react"
+    }
+  },
+  "integrations": {
+    "telegram_bot_api": "api.telegram.org",
+    "nova_poshta_api": "api.novaposhta.ua/v2.0/json/",
+    "wayforpay": "secure.wayforpay.com/pay"
+  },
+  "entry_points": {
+    "backend": "backend/server.py",
+    "frontend": "frontend/src/tma-mobile/App.jsx",
+    "bot": "backend/modules/bot/simple_bot.py",
+    "adapter": "backend/modules/tma/site_adapter.py"
+  },
+  "documentation": {
+    "README": "README.md",
+    "architecture": "docs/01_ARCHITECTURE.md",
+    "handoff": "docs/02_HANDOFF.md",
+    "keys": "docs/03_INTEGRATION_KEYS.md",
+    "tech_notes": "docs/04_TECH_NOTES.md",
+    "design": "docs/05_DESIGN_GUIDELINES.md",
+    "dev_plan": "docs/06_DEV_PLAN.md"
+  },
+  "deployment": {
+    "script": "scripts/deploy.sh",
+    "smoke_test": "scripts/smoke_test.sh",
+    "nginx_example": "config/nginx_example.conf",
+    "supervisor": "config/supervisord_telegram_bot.conf",
+    "backend_env_template": "config/env.example",
+    "frontend_env_template": "frontend/.env.example"
+  },
+  "api_endpoints": {
+    "health": "GET /api/health",
+    "tma_gateway": "GET|POST /api/tma/*",
+    "nova_poshta": "GET /api/tma/np/cities | /api/tma/np/warehouses",
+    "wayforpay_webhook": "POST /api/v2/payments/wayforpay/webhook",
+    "wayforpay_create": "POST /api/v2/payments/wayforpay/create"
+  },
+  "mongodb_collections": [
+    "users",
+    "tma_sessions",
+    "products",
+    "categories",
+    "orders",
+    "tma_favorites",
+    "reviews",
+    "tma_support_tickets",
+    "bot_settings"
+  ],
+  "critical_invariants": [
+    "Backend routes MUST use /api prefix",
+    "Backend MUST bind 0.0.0.0:8001",
+    "Order status MUST be lowercase (paid, pending_payment, ...)",
+    "city_ref and warehouse_ref REQUIRED in order.delivery",
+    "WayForPay webhook MUST verify HMAC_MD5 signature",
+    "WayForPay webhook MUST return signed-response (accept)",
+    "TMA_ALLOW_SANDBOX MUST be 0 in production"
+  ]
+}

@@ -1,0 +1,32 @@
+/* ===== Floating buttons (P0 hotfix) ===== */
+.ys-float-stack{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 50;
+}
+
+@media (max-width: 780px){
+  .ys-float-stack{ right: 10px; bottom: 10px; }
+}
+
+.ys-float-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+}
+
+.ys-float-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+}

@@ -1,0 +1,1076 @@
+/* ============================================
+   Y-Store Mobile Adaptive CSS
+   Premium Mobile-First Design System
+   ============================================ */
+
+/* ============================================
+   1. MOBILE VARIABLES
+   ============================================ */
+:root {
+  --mobile-spacing-xs: 8px;
+  --mobile-spacing-sm: 12px;
+  --mobile-spacing-md: 16px;
+  --mobile-spacing-lg: 20px;
+  --mobile-touch-target: 44px;
+  --mobile-card-gap: 10px;
+  --mobile-section-gap: 24px;
+  --mobile-bottom-nav-height: 64px;
+}
+
+/* ============================================
+   2. HORIZONTAL SCROLL CONTAINERS
+   ============================================ */
+.ys-scroll-horizontal {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: var(--mobile-card-gap);
+  padding-bottom: 8px;
+  margin: 0 calc(-1 * var(--ys-container-pad));
+  padding-left: var(--ys-container-pad);
+  padding-right: var(--ys-container-pad);
+}
+.ys-scroll-horizontal::-webkit-scrollbar {
+  display: none;
+}
+.ys-scroll-horizontal > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   3. MOBILE PRODUCT CARD (COMPACT)
+   ============================================ */
+@media (max-width: 767px) {
+  /* Card in horizontal scroll */
+  .ys-scroll-horizontal .ys-pcard,
+  .ys-scroll-horizontal .ys-card {
+    width: 140px;
+    min-width: 140px;
+  }
+  
+  /* Grid cards - 2 columns compact */
+  .ys-pcard {
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .ys-pcard:active {
+    transform: scale(0.98);
+  }
+  
+  .ys-pcard-media {
+    position: relative;
+    aspect-ratio: 1;
+    background: #f9fafb;
+    overflow: hidden;
+  }
+  .ys-pcard-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+  }
+  .ys-badge-discount {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: #FF3B30;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 6px;
+  }
+  
+  .ys-pcard-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ys-pcard-title {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    height: 2.6em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    color: #111;
+  }
+  .ys-pcard-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #6b7280;
+  }
+  .ys-stock.is-ok { color: #34C759; }
+  .ys-stock.is-no { color: #FF3B30; }
+  .ys-rating { 
+    display: flex;
+    align-items: center;
+    color: #FFB800;
+  }
+  .ys-rating.ys-muted { color: #d1d5db; }
+  
+  .ys-pcard-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ys-price-now {
+    font-size: 14px;
+    font-weight: 800;
+    color: #111;
+  }
+  .ys-price-old {
+    font-size: 11px;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+  
+  .ys-pcard .ys-btn {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+    min-height: var(--mobile-touch-target);
+  }
+}
+
+/* ============================================
+   4. MOBILE CATEGORY SLIDER
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-categories-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    padding: 8px 0;
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    padding-left: var(--ys-container-pad);
+    padding-right: var(--ys-container-pad);
+  }
+  .ys-categories-scroll::-webkit-scrollbar { display: none; }
+  
+  .ys-cat-pill {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 72px;
+    text-decoration: none;
+  }
+  .ys-cat-pill-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .ys-cat-pill:active .ys-cat-pill-icon {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .ys-cat-pill-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: #374151;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 72px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* ============================================
+   5. MOBILE SECTION HEADERS
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-section {
+    margin-bottom: var(--mobile-section-gap);
+  }
+  .ys-section-sm {
+    margin-bottom: 16px;
+  }
+  
+  .ys-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0;
+  }
+  .ys-section-title {
+    font-size: 18px !important;
+    font-weight: 700;
+    color: #111;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ys-section-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0A84FF;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+    min-height: var(--mobile-touch-target);
+  }
+}
+
+/* ============================================
+   6. MOBILE GRID - 2 COLUMNS
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-grid,
+  .ys-grid-3,
+  .ys-grid-4,
+  .ys-grid-5,
+  .ys-grid-6 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--mobile-card-gap);
+  }
+  
+  /* Single column for certain contexts */
+  .ys-grid-1-mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   7. MOBILE HERO BANNER
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-home-hero {
+    display: block !important;
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    padding: 0 var(--ys-container-pad);
+  }
+  
+  .ys-home-sidebar {
+    display: none !important;
+  }
+  
+  .ys-hero,
+  .hero-wrapper {
+    height: 200px !important;
+    border-radius: 12px !important;
+    margin-bottom: 16px;
+  }
+  
+  .ys-hero-content {
+    padding: 16px !important;
+  }
+  .ys-hero-title {
+    font-size: 22px !important;
+    margin-bottom: 8px !important;
+  }
+  .ys-hero-subtitle {
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+  }
+  .ys-hero-content .ys-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .ys-hero-arrow {
+    width: 36px;
+    height: 36px;
+  }
+  .ys-hero-arrow.left { left: 8px; }
+  .ys-hero-arrow.right { right: 8px; }
+  
+  .ys-hero-nav {
+    bottom: 12px;
+  }
+  .ys-hero-dot {
+    width: 8px;
+    height: 8px;
+  }
+  .ys-hero-dot.active {
+    width: 24px;
+  }
+}
+
+/* ============================================
+   8. MOBILE ADVANTAGES/INFO STRIP
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-advantages-strip {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 8px;
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    padding: 0 var(--ys-container-pad);
+  }
+  .ys-advantages-strip::-webkit-scrollbar { display: none; }
+  
+  .ys-advantage-item {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 10px;
+    padding: 10px 12px;
+    min-width: fit-content;
+    white-space: nowrap;
+  }
+  .ys-advantage-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #22c55e;
+    flex-shrink: 0;
+  }
+  .ys-advantage-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #374151;
+  }
+}
+
+/* ============================================
+   9. MOBILE PROMO BANNERS
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-promo-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    padding: 0 var(--ys-container-pad);
+  }
+  .ys-promo-grid::-webkit-scrollbar { display: none; }
+  
+  .ys-promo-card {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 280px;
+    min-width: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .ys-mini-banners {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 10px;
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    padding: 0 var(--ys-container-pad);
+  }
+  .ys-mini-banners::-webkit-scrollbar { display: none; }
+  
+  .ys-mini-banner {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 200px;
+    min-width: 200px;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+}
+
+/* ============================================
+   10. MOBILE BOTTOM NAVIGATION
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--mobile-bottom-nav-height);
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .ys-bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex: 1;
+    height: 100%;
+    padding: 8px;
+    color: #6b7280;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    position: relative;
+  }
+  .ys-bottom-nav-item.active,
+  .ys-bottom-nav-item:active {
+    color: #0A84FF;
+  }
+  .ys-bottom-nav-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .ys-bottom-nav-label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .ys-bottom-nav-badge {
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 16px);
+    min-width: 16px;
+    height: 16px;
+    background: #FF3B30;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+  }
+  
+  /* Add bottom padding to main content */
+  body.has-bottom-nav {
+    padding-bottom: calc(var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom));
+  }
+}
+
+/* ============================================
+   11. MOBILE HEADER COMPACT
+   ============================================ */
+@media (max-width: 767px) {
+  .v3-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .v3-top {
+    padding: 10px 0;
+  }
+  .v3-top-inner {
+    gap: 10px;
+  }
+  
+  .v3-logo-text {
+    font-size: 20px !important;
+  }
+  
+  .v3-search-form {
+    border-radius: 10px;
+  }
+  .v3-search-input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  .v3-search-btn {
+    padding: 10px 12px;
+  }
+  
+  .v3-icon-link {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+  .v3-badge {
+    min-width: 16px;
+    height: 16px;
+    font-size: 10px;
+    top: 0;
+    right: 0;
+  }
+  
+  /* Hide bottom nav bar on mobile - use bottom nav instead */
+  .v3-bottom {
+    display: none;
+  }
+}
+
+/* ============================================
+   12. MOBILE DEAL OF DAY
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-deal-card {
+    border-radius: 12px;
+    padding: 16px;
+  }
+  
+  .ys-deal-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .ys-deal-image {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f9fafb;
+  }
+  
+  .ys-deal-info {
+    text-align: center;
+  }
+  .ys-deal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .ys-deal-price {
+    font-size: 24px;
+    font-weight: 800;
+    color: #111;
+  }
+  .ys-deal-old-price {
+    font-size: 16px;
+    color: #9ca3af;
+    text-decoration: line-through;
+    margin-left: 8px;
+  }
+  
+  .ys-deal-timer {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .ys-deal-timer-item {
+    background: #111;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 50px;
+  }
+  .ys-deal-timer-value {
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+  }
+  .ys-deal-timer-label {
+    font-size: 10px;
+    color: #9ca3af;
+  }
+}
+
+/* ============================================
+   13. MOBILE BRANDS STRIP
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-brands-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    padding: 12px var(--ys-container-pad);
+  }
+  .ys-brands-scroll::-webkit-scrollbar { display: none; }
+  
+  .ys-brand-item {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 100px;
+    height: 60px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+  .ys-brand-item img {
+    max-width: 80px;
+    max-height: 40px;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: all 0.2s ease;
+  }
+  .ys-brand-item:active img {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   14. MOBILE TESTIMONIALS
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-testimonials-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    padding: 0 var(--ys-container-pad);
+  }
+  .ys-testimonials-scroll::-webkit-scrollbar { display: none; }
+  
+  .ys-testimonial-card {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 280px;
+    min-width: 280px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .ys-testimonial-header {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .ys-testimonial-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    object-fit: cover;
+  }
+  .ys-testimonial-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+  }
+  .ys-testimonial-rating {
+    display: flex;
+    gap: 2px;
+    color: #FFB800;
+  }
+  .ys-testimonial-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4b5563;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ============================================
+   15. MOBILE NEWSLETTER
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-newsletter {
+    background: linear-gradient(135deg, #0A84FF 0%, #0066CC 100%);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .ys-newsletter-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .ys-newsletter-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 16px;
+  }
+  .ys-newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ys-newsletter-input {
+    padding: 14px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    width: 100%;
+  }
+  .ys-newsletter-btn {
+    padding: 14px 20px;
+    background: #fff;
+    color: #0A84FF;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: var(--mobile-touch-target);
+  }
+}
+
+/* ============================================
+   16. MOBILE FOOTER COMPACT
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-footer {
+    padding: 24px var(--ys-container-pad);
+    padding-bottom: calc(var(--mobile-bottom-nav-height) + 24px + env(safe-area-inset-bottom));
+  }
+  
+  .ys-footer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .ys-footer-section {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 20px;
+  }
+  .ys-footer-section:last-child {
+    border-bottom: none;
+  }
+  
+  .ys-footer-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ys-footer-title::after {
+    content: '+';
+    font-size: 18px;
+    font-weight: 400;
+  }
+  .ys-footer-section.open .ys-footer-title::after {
+    content: '−';
+  }
+  
+  .ys-footer-links {
+    display: none;
+  }
+  .ys-footer-section.open .ys-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ys-footer-link {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    padding: 8px 0;
+    min-height: var(--mobile-touch-target);
+    display: flex;
+    align-items: center;
+  }
+  
+  .ys-footer-bottom {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 20px;
+  }
+}
+
+/* ============================================
+   17. PRODUCT PAGE MOBILE
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-product-page {
+    padding-bottom: calc(var(--mobile-bottom-nav-height) + 80px);
+  }
+  
+  .ys-product-gallery {
+    margin: 0 calc(-1 * var(--ys-container-pad));
+    aspect-ratio: 1;
+    max-height: 350px;
+  }
+  
+  .ys-product-info {
+    padding: 16px 0;
+  }
+  .ys-product-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .ys-product-price {
+    font-size: 28px;
+    font-weight: 800;
+  }
+  .ys-product-old-price {
+    font-size: 18px;
+    color: #9ca3af;
+    text-decoration: line-through;
+    margin-left: 12px;
+  }
+  
+  /* Sticky Add to Cart */
+  .ys-product-sticky-bar {
+    position: fixed;
+    bottom: var(--mobile-bottom-nav-height);
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding: 12px var(--ys-container-pad);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 999;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  .ys-product-sticky-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+  }
+  .ys-product-sticky-btn {
+    flex: 1;
+    padding: 14px 20px;
+    min-height: var(--mobile-touch-target);
+  }
+}
+
+/* ============================================
+   18. CART PAGE MOBILE
+   ============================================ */
+@media (max-width: 767px) {
+  .ys-cart-page {
+    padding-bottom: calc(var(--mobile-bottom-nav-height) + 120px);
+  }
+  
+  .ys-cart-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.06);
+    margin-bottom: 10px;
+  }
+  .ys-cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f9fafb;
+    flex-shrink: 0;
+  }
+  .ys-cart-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .ys-cart-item-title {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .ys-cart-item-price {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .ys-cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .ys-cart-qty-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  /* Sticky Cart Summary */
+  .ys-cart-sticky-summary {
+    position: fixed;
+    bottom: var(--mobile-bottom-nav-height);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding: 12px var(--ys-container-pad);
+    z-index: 999;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  }
+  .ys-cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .ys-cart-total-label {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  .ys-cart-total-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: #111;
+  }
+  .ys-cart-checkout-btn {
+    width: 100%;
+    padding: 14px 20px;
+    min-height: var(--mobile-touch-target);
+    font-size: 15px;
+  }
+}
+
+/* ============================================
+   19. UTILITY CLASSES
+   ============================================ */
+@media (max-width: 767px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  .show-mobile-flex { display: flex !important; }
+  
+  /* Touch feedback */
+  .touch-feedback:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+  
+  /* Full bleed on mobile */
+  .mobile-full-bleed {
+    margin-left: calc(-1 * var(--ys-container-pad));
+    margin-right: calc(-1 * var(--ys-container-pad));
+    padding-left: var(--ys-container-pad);
+    padding-right: var(--ys-container-pad);
+  }
+}
+
+/* ============================================
+   20. PRODUCT SECTION RESPONSIVE
+   ============================================ */
+/* Mobile: Horizontal scroll */
+.ys-products-scroll-mobile {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 12px;
+  padding-bottom: 8px;
+  margin: 0 -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.ys-products-scroll-mobile::-webkit-scrollbar { display: none; }
+.ys-products-scroll-mobile > * {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 150px;
+  min-width: 150px;
+}
+
+/* Desktop: Grid - hide scroll, show grid */
+.ys-products-grid-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .ys-products-scroll-mobile {
+    display: none;
+  }
+  .ys-products-grid-desktop {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .ys-products-grid-desktop {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Skeleton loader */
+.ys-product-section-skeleton {
+  display: flex;
+  gap: 12px;
+  overflow: hidden;
+}
+.ys-product-section-skeleton > * {
+  flex-shrink: 0;
+  width: 150px;
+}
+@media (min-width: 768px) {
+  .ys-product-section-skeleton {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .ys-product-section-skeleton > * {
+    width: auto;
+  }
+}
+
+/* ============================================
+   20. SCROLLBAR HIDE UTILITY
+   ============================================ */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,89 @@
+/**
+ * TMA Design Tokens
+ * Based on Telegram theme variables + premium Y-Store accent system
+ * Reference: /app/design_guidelines.md
+ */
+
+:root {
+  /* ========== Base Colors (map from Telegram theme) ========== */
+  --tma-bg: var(--tg-theme-bg-color, #F7F8FA);
+  --tma-surface: var(--tg-theme-secondary-bg-color, #FFFFFF);
+  --tma-surface-2: color-mix(in srgb, var(--tma-surface) 92%, #000 8%);
+  --tma-text: var(--tg-theme-text-color, #0B1220);
+  --tma-hint: var(--tg-theme-hint-color, #6B7280);
+  --tma-link: var(--tg-theme-link-color, #2A7FFF);
+  --tma-border: color-mix(in srgb, var(--tma-text) 10%, transparent);
+
+  /* ========== Brand Accents ========== */
+  --tma-accent: #0EA5A4; /* Teal-cyan: premium tech feel */
+  --tma-accent-2: #2A7FFF; /* Telegram blue */
+  --tma-success: #16A34A;
+  --tma-danger: #EF4444;
+  --tma-warning: #F59E0B;
+
+  /* ========== Border Radius ========== */
+  --tma-radius-lg: 18px;
+  --tma-radius-md: 14px;
+  --tma-radius-sm: 12px;
+  --tma-radius-full: 9999px;
+
+  /* ========== Shadows ========== */
+  --tma-shadow-1: 0 1px 0 rgba(0, 0, 0, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --tma-shadow-2: 0 2px 0 rgba(0, 0, 0, 0.05), 0 14px 40px rgba(15, 23, 42, 0.10);
+
+  /* ========== Focus Ring ========== */
+  --tma-ring: 0 0 0 3px color-mix(in srgb, var(--tma-accent-2) 22%, transparent);
+
+  /* ========== Safe Area ========== */
+  --tma-safe-top: max(10px, env(safe-area-inset-top));
+  --tma-safe-bottom: max(12px, env(safe-area-inset-bottom));
+
+  /* ========== Layout ========== */
+  --tma-nav-h: 64px;
+  --tma-content-pad: 16px;
+
+  /* ========== Spacing Scale ========== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ========== Typography Scale ========== */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ========== Transitions ========== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========== Telegram Theme Support (Dark Mode) ========== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tma-bg: var(--tg-theme-bg-color, #0F1419);
+    --tma-surface: var(--tg-theme-secondary-bg-color, #1A1F28);
+    --tma-text: var(--tg-theme-text-color, #E8EAF6);
+    --tma-hint: var(--tg-theme-hint-color, #8E96A3);
+    --tma-border: color-mix(in srgb, var(--tma-text) 15%, transparent);
+  }
+}

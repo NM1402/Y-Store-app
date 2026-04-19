@@ -1,0 +1,123 @@
+/**
+ * TMA Mobile - Components Styles
+ * Reusable UI components
+ */
+
+/* Button */
+.tma-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  min-height: 48px;
+  gap: var(--space-2);
+  user-select: none;
+}
+
+.tma-btn-primary {
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+}
+
+.tma-btn-primary:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.tma-btn-secondary {
+  background: var(--tg-theme-secondary-bg-color);
+  color: var(--tg-theme-text-color);
+}
+
+.tma-btn-ghost {
+  background: transparent;
+  color: var(--tg-theme-link-color);
+}
+
+.tma-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Card */
+.tma-card {
+  background: var(--tg-theme-section-bg-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.tma-card-clickable {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.tma-card-clickable:active {
+  transform: scale(0.98);
+}
+
+/* Badge */
+.tma-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  background: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  min-width: 20px;
+  height: 20px;
+}
+
+/* Divider */
+.tma-divider {
+  height: 1px;
+  background: var(--tg-theme-secondary-bg-color);
+  margin: var(--space-4) 0;
+}
+
+/* Skeleton */
+.tma-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--tg-theme-secondary-bg-color) 25%,
+    var(--tg-theme-hint-color) 50%,
+    var(--tg-theme-secondary-bg-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: tma-skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes tma-skeleton-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Input */
+.tma-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  color: var(--tg-theme-text-color);
+  background: var(--tg-theme-secondary-bg-color);
+  border: none;
+  border-radius: var(--radius-lg);
+  outline: none;
+  transition: all var(--transition-base);
+}
+
+.tma-input:focus {
+  box-shadow: 0 0 0 2px var(--tg-theme-button-color);
+}
+
+.tma-input::placeholder {
+  color: var(--tg-theme-hint-color);
+}

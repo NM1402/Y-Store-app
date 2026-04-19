@@ -1,0 +1,140 @@
+/app/tma-package
+├── MANIFEST.json
+├── README.md
+├── STRUCTURE.txt
+├── backend
+│   ├── advanced_analytics_service.py
+│   ├── ai_service.py
+│   ├── analytics_service.py
+│   ├── app.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── db.py
+│   │   ├── models.py
+│   │   └── security.py
+│   ├── crm_service.py
+│   ├── email_service.py
+│   ├── modules
+│   │   ├── __init__.py
+│   │   ├── ab
+│   │   ├── admin
+│   │   ├── analytics
+│   │   ├── analytics_intel
+│   │   ├── attributes
+│   │   ├── auth
+│   │   ├── automation
+│   │   ├── banners
+│   │   ├── bot
+│   │   ├── cabinet
+│   │   ├── cart
+│   │   ├── catalog
+│   │   ├── catalog_v2
+│   │   ├── compare
+│   │   ├── content
+│   │   ├── crm
+│   │   ├── delivery
+│   │   ├── finance
+│   │   ├── growth
+│   │   ├── guard
+│   │   ├── jobs
+│   │   ├── notifications
+│   │   ├── ops
+│   │   ├── orders
+│   │   ├── payments
+│   │   ├── pickup_control
+│   │   ├── products
+│   │   ├── promo
+│   │   ├── refunds
+│   │   ├── returns
+│   │   ├── revenue
+│   │   ├── reviews
+│   │   ├── risk
+│   │   ├── search
+│   │   ├── security
+│   │   ├── seed_routes.py
+│   │   ├── seo
+│   │   ├── shop_routes.py
+│   │   ├── site
+│   │   ├── support
+│   │   ├── telegram_bff.py
+│   │   ├── timeline
+│   │   ├── tma
+│   │   └── wishlist
+│   ├── novaposhta_service.py
+│   ├── payouts_service.py
+│   ├── requirements.txt
+│   ├── rozetkapay_service.py
+│   ├── scripts
+│   │   └── seed_categories.py
+│   ├── seed_categories.py
+│   ├── seed_categories_v2.py
+│   ├── seed_products.py
+│   ├── server.py
+│   ├── setup.sh
+│   ├── setup_search_index.py
+│   ├── start_bot.sh
+│   ├── start_simple_bot.sh
+│   ├── tests
+│   │   ├── test_b8_b12.py
+│   │   ├── test_cabinet_v2.py
+│   │   ├── test_catalog_v2.py
+│   │   ├── test_fondy_payments.py
+│   │   ├── test_orders_payments_v2.py
+│   │   ├── test_tma_backend.py
+│   │   ├── test_tracking_refunds_v2.py
+│   │   └── test_v2_ecommerce.py
+│   └── update_brands.py
+├── config
+│   ├── env.example
+│   ├── nginx_example.conf
+│   └── supervisord_telegram_bot.conf
+├── docs
+│   ├── 01_ARCHITECTURE.md
+│   ├── 02_HANDOFF.md
+│   ├── 03_INTEGRATION_KEYS.md
+│   ├── 04_TECH_NOTES.md
+│   ├── 05_DESIGN_GUIDELINES.md
+│   └── 06_DEV_PLAN.md
+├── frontend
+│   ├── README.md
+│   ├── components.json
+│   ├── craco.config.js
+│   ├── jsconfig.json
+│   ├── package.json
+│   ├── plugins
+│   │   └── health-check
+│   ├── postcss.config.js
+│   ├── public
+│   │   ├── index.html
+│   │   └── ystore-logo.jpg
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.js
+│   │   ├── api
+│   │   ├── components
+│   │   ├── contexts
+│   │   ├── data
+│   │   ├── hooks
+│   │   ├── i18n
+│   │   ├── index.css
+│   │   ├── index.css.backup
+│   │   ├── index.js
+│   │   ├── layout
+│   │   ├── lib
+│   │   ├── locales
+│   │   ├── pages
+│   │   ├── services
+│   │   ├── styles
+│   │   ├── theme
+│   │   ├── tma-mobile
+│   │   └── utils
+│   ├── tailwind.config.js
+│   └── yarn.lock
+├── integration
+│   └── site_adapter.py
+└── scripts
+    ├── deploy.sh
+    └── smoke_test.sh
+
+71 directories, 67 files

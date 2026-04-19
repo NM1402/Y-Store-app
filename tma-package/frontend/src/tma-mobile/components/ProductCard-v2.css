@@ -1,0 +1,251 @@
+/**
+ * Product Card v2.0 Styles
+ * Modern mobile commerce: depth, badges, floating action
+ */
+
+.product-card-v2 {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* Універсальна висота: зображення (1:1) + info (120px гарантовано) */
+  height: 100%;
+  min-height: 0;
+}
+
+.product-card-v2:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-floating);
+}
+
+/* ========== IMAGE AREA ========== */
+.product-card-v2__image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--color-bg-subtle);
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.product-card-v2__image {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card-v2__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.product-card-v2:active .product-card-v2__image img {
+  transform: scale(1.05);
+}
+
+.product-card-v2__image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+/* ========== BADGES ========== */
+.product-card-v2__badges {
+  position: absolute;
+  top: var(--space-8);
+  left: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  z-index: 2;
+}
+
+.product-card-v2__badge {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.product-card-v2__badge--discount {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+}
+
+.product-card-v2__badge--featured {
+  background: rgba(14, 165, 164, 0.9);
+  color: white;
+}
+
+.product-card-v2__badge--new {
+  background: rgba(37, 99, 235, 0.9);
+  color: white;
+}
+
+/* ========== FLOATING ADD BUTTON ========== */
+.product-card-v2__add-btn {
+  position: absolute;
+  bottom: var(--space-8);
+  right: var(--space-8);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-floating);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  z-index: 3;
+}
+
+.product-card-v2__add-btn:hover {
+  background: var(--color-brand-primary-pressed);
+}
+
+.product-card-v2__add-btn:active {
+  transform: scale(0.92);
+}
+
+/* ========== INFO AREA ========== */
+.product-card-v2__info {
+  padding: var(--space-8) var(--space-12) var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+/* Meta Row */
+.product-card-v2__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.product-card-v2__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-caption-size);
+  color: var(--color-text-secondary);
+}
+
+.product-card-v2__rating-star {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.product-card-v2__rating-value {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.product-card-v2__stock {
+  font-size: var(--text-caption-size);
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.product-card-v2__stock--out {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* Title */
+.product-card-v2__title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 34px;
+}
+
+/* Price Block — ФІКСОВАНА висота (резервуємо місце під old-price завжди) */
+.product-card-v2__price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  min-height: 34px; /* = price (16px) + gap (2px) + old-price (12px) + buffer */
+  justify-content: flex-end;
+}
+
+.product-card-v2__price {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+
+.product-card-v2__old-price {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--color-text-tertiary);
+  text-decoration: line-through;
+  min-height: 14px; /* коли порожня (нема old_price) — простір все одно є через placeholder */
+}
+
+/* Невидимий placeholder для old-price коли немає знижки */
+.product-card-v2__old-price--placeholder {
+  visibility: hidden;
+  min-height: 14px;
+  display: block;
+}
+
+/* ============ GROWTH v2 - FAVORITES ============ */
+
+.product-card-v2__favorite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card-v2__favorite:active {
+  transform: scale(0.9);
+}
+
+.product-card-v2__favorite--active {
+  color: #EF4444;
+  background: #FEE2E2;
+}

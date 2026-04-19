@@ -1,0 +1,205 @@
+/**
+ * Cart v2.0 Styles
+ * Summary cards, delivery progress, clean layout
+ */
+
+.cart-v2 {
+  padding: var(--layout-page-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-section-gap);
+  padding-bottom: 120px;
+}
+
+/* Cart Items List */
+.cart-v2__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-list-gap);
+}
+
+/* Summary Card */
+.cart-v2__summary-card {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--layout-card-padding);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.cart-v2__summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-v2__summary-label {
+  font-size: var(--text-body-size);
+  color: var(--color-text-secondary);
+}
+
+.cart-v2__summary-value {
+  font-size: var(--text-body-size);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.cart-v2__summary-row--total .cart-v2__summary-label {
+  font-size: var(--text-h3-size);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.cart-v2__summary-row--total .cart-v2__summary-value {
+  font-size: var(--text-price-card-size);
+  font-weight: var(--text-price-card-weight);
+  color: var(--color-brand-primary);
+}
+
+.cart-v2__summary-divider {
+  height: 1px;
+  background: var(--color-border-light);
+}
+
+/* Delivery Progress */
+.cart-v2__delivery {
+  background: var(--color-warning-bg);
+  border-radius: var(--radius-md);
+  padding: var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.cart-v2__delivery--success {
+  background: var(--color-success-bg);
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.cart-v2__delivery--success svg {
+  color: var(--color-success);
+  flex-shrink: 0;
+}
+
+.cart-v2__delivery-text {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--text-body-secondary-size);
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.cart-v2__delivery-text svg {
+  color: var(--color-brand-primary);
+  flex-shrink: 0;
+}
+
+.cart-v2__delivery-text strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.cart-v2__delivery-bar {
+  height: 6px;
+  background: var(--color-border-light);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.cart-v2__delivery-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-brand-primary), var(--color-brand-secondary));
+  border-radius: var(--radius-pill);
+  transition: width var(--transition-slow);
+}
+
+/* ============ GROWTH LAYER - SMART UPSELL ============ */
+
+.cart-v2__smart-upsell {
+  margin-top: var(--space-20);
+  padding: var(--space-16);
+  background: #F0FDF4;
+  border-radius: var(--radius-lg);
+  border: 2px solid #BBF7D0;
+}
+
+.cart-v2__upsell-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: 15px;
+  font-weight: 600;
+  color: #166534;
+  margin-bottom: var(--space-12);
+}
+
+.cart-v2__upsell-title svg {
+  flex-shrink: 0;
+}
+
+/* ============ GROWTH LAYER - CROSS-SELL ============ */
+
+.cart-v2__cross-sell {
+  margin-top: var(--space-24);
+}
+
+.cart-v2__cross-sell-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-16) 0;
+}
+
+.cart-v2__cross-sell-title svg {
+  color: var(--color-brand-primary);
+  flex-shrink: 0;
+}
+
+.cart-v2__cross-sell-scroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-12);
+  padding-bottom: var(--space-8);
+}
+
+/* ============ GROWTH v3 - SAVINGS + LOSS AVERSION ============ */
+
+.cart-v2__savings {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  color: #047857;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.cart-v2__savings strong { font-weight: 800; }
+.cart-v2__savings svg { color: #059669; flex-shrink: 0; }
+
+.cart-v2__pressure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-top: 8px;
+  background: #FFF7ED;
+  color: #9A3412;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.cart-v2__pressure strong { font-weight: 800; color: #C2410C; }
+.cart-v2__pressure svg { color: #EA580C; flex-shrink: 0; }
