@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Audit: backend structure and routes",
+    "status": "completed"
+  },
+  {
+    "content": "Audit: TMA routes (/api/tma/*) — endpoints, auth, business logic",
+    "status": "completed"
+  },
+  {
+    "content": "Audit: WayForPay integration (routes, provider, webhook, HMAC)",
+    "status": "completed"
+  },
+  {
+    "content": "Audit: Nova Poshta integration (BFF, TTN creation, sender setup)",
+    "status": "completed"
+  },
+  {
+    "content": "Audit: Data models (products, categories, orders, users)",
+    "status": "completed"
+  },
+  {
+    "content": "Audit: Frontend TMA structure (screens, store, api-client)",
+    "status": "completed"
+  },
+  {
+    "content": "Audit: Telegram bot — commands, menu-button, alerts",
+    "status": "completed"
+  },
+  {
+    "content": "Identify all integration touchpoints with 'main site' backend",
+    "status": "completed"
+  },
+  {
+    "content": "Write comprehensive INTEGRATION_AUDIT.md — structure, flows, dev checklist",
+    "status": "completed"
+  },
+  {
+    "content": "Create skeleton site_adapter.py for dev to fill",
+    "status": "completed"
+  }
+]

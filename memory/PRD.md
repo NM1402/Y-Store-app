@@ -41,7 +41,22 @@
 - Backend health: `/api/health`
 - Bot: @Ystore_app_bot
 
+## Audit & Integration Guide (session 2 — 2026-04-19)
+- ✅ Full backend/frontend code audit performed
+- ✅ Created `/app/INTEGRATION_AUDIT.md` — comprehensive handoff для дев-інтегратора
+  - Архітектура з діаграмами
+  - Flows (auth, catalog, cart, checkout, WFP webhook, NP TTN, bot)
+  - Моделі даних (users, products, categories, orders, tma_sessions, bot_settings)
+  - Повний список endpoints `/api/tma/*` + публічні WFP webhook
+  - 14 виявлених нюансів/TODO (store-info hardcoded, duplicate routes, missing JWT, WFP retry, etc.)
+  - Production checklist (nginx, supervisor, BotFather, WFP admin)
+  - Smoke-test scripts
+- ✅ Створено skeleton `/app/backend/modules/tma/site_adapter.py`
+  - 5 методів: list_products, get_product, list_categories, register_order, match_user
+  - Lazy httpx client, feature-flag SITE_ADAPTER_ENABLED
+  - Готові normalizer функції (заготовки під реальну схему сайту)
+
 ## Next Tasks (awaiting user input)
-- Доработка TMA — конкретные запросы от пользователя
-- Опционально: проверить checkout flow с WayForPay в dev-режиме
-- Опционально: проверить создание ТТН Нової Пошти (sandbox)
+- Доробка TMA — конкретні запити від користувача
+- Опціонально: інтегрувати site_adapter з реальним REST API сайту y-store.in.ua
+- Опціонально: production hardening (JWT, CORS, remove DEV endpoints)
