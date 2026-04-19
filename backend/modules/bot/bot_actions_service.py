@@ -53,14 +53,18 @@ class BotActionsService:
                 return {"ok": False, "error": "ORDER_MISSING_NP_REFS"}
 
             full_name = (cust.get("full_name") or "").strip()
-            parts = full_name.split()
+            parts = [p for p in full_name.split() if p]
             if len(parts) >= 2:
                 last_name, first_name = parts[0], parts[1]
                 middle_name = parts[2] if len(parts) > 2 else ""
             else:
                 last_name = cust.get("last_name") or "Покупець"
-                first_name = cust.get("first_name") or "Клієнт"
+                first_name = cust.get("first_name") or (parts[0] if parts else "Клієнт")
                 middle_name = ""
+            # Нова Пошта вимагає ПІБ як "Прізвище Ім'я" (2+ слова) — не одне слово
+            recipient_name = " ".join([p for p in [last_name, first_name, middle_name] if p]).strip()
+            if len(recipient_name.split()) < 2:
+                recipient_name = f"{recipient_name} Клієнт".strip()
 
             phone = (cust.get("phone") or "").replace("+", "").replace(" ", "").replace("-", "")
             total = float(order.get("total_amount") or 0)
@@ -104,7 +108,7 @@ class BotActionsService:
                 "RecipientArea": "",
                 "RecipientAreaRegions": "",
                 "RecipientAddressName": deliv.get("warehouse_name", "1"),
-                "RecipientName": full_name or f"{last_name} {first_name}".strip(),
+                "RecipientName": recipient_name,
                 "RecipientType": "PrivatePerson",
                 "RecipientsPhone": phone,
             }

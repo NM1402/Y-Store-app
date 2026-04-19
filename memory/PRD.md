@@ -74,7 +74,15 @@
 - ✅ `viewport meta` оновлено: `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover`
 - ✅ Тестовано: TMA коректно відображається від 320px до 1920px width без overflow, без collapse карток
 
+## Session 4 — Bug fixes after responsive (2026-04-19)
+- ✅ **Fix TTN "RecipientName incorrect":** Nova Poshta вимагає мінімум 2 слова (Прізвище + Ім'я). Якщо sandbox user має одне ім'я ("Sandbox") — auto-append "Клієнт" fallback. `bot_actions_service.py#create_ttn`
+- ✅ **Verified:** реальна ТТН створюється: order_id=cf53b7... → tracking=20451419147533
+- ✅ **Fix Bundle "Додати комплект" radius:** 999px pill → 14px (консистентно з np-picker__trigger)
+- ✅ **Fix "+" button lost:** responsive-fix робив `position: absolute` + `top/left/right/bottom: 0` на ВСІХ дітях image-wrapper → badges/add-btn/favorite розтягувались на весь wrapper. Fix: застосовується тільки до `.product-card-v2__image`, floating UI зберігає оригінальні координати з ProductCard-v2.css
+- ✅ **Fix Checkout narrow inputs:** додано exceptions `min-height: 52px !important` для `.np-picker__trigger`, `.checkout-v3__input`, `.np-sheet__search-input`. NP BottomSheet має `min-height: 380px`, items `min-height: 56px`
+- ✅ **Ukrainian operator validation:** повний список префіксів (Київстар 39/67/68/96/97/98, Vodafone 50/66/95/99, lifecell 63/73/93, Intertelecom 94, 3Mob 91, Ukrtelecom 92) + detectOperatorUA() хелпер + перевірка на "всі однакові цифри" (фейкові номери)
+
 ## Next Tasks (awaiting user input)
-- Доробка TMA — конкретні запити від користувача
-- Опціонально: інтегрувати site_adapter з реальним REST API сайту y-store.in.ua
-- Опціонально: production hardening (JWT, CORS, remove DEV endpoints)
+- Подивитись "Мої замовлення" у Telegram Desktop — перевірити layout
+- Опціонально: інтегрувати site_adapter з реальним REST API сайту
+- Опціонально: виведення оператора у checkout form (live під полем телефона)

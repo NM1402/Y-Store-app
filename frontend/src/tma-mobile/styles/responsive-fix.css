@@ -84,8 +84,8 @@
   padding-bottom: 100%; /* 1:1 aspect ratio fallback */
 }
 
-/* Контент картинки позиціонується абсолютно */
-.product-card-v2__image-wrapper > * {
+/* Контент картинки позиціонується абсолютно — ТІЛЬКИ image, не floating елементи */
+.product-card-v2__image-wrapper > .product-card-v2__image {
   position: absolute;
   top: 0;
   left: 0;
@@ -108,16 +108,23 @@
   display: block;
 }
 
-/* Якщо aspect-ratio ТАКИ підтримується — використовуємо його поверх */
+/* Якщо aspect-ratio ТАКИ підтримується — використовуємо його */
 @supports (aspect-ratio: 1) {
   .product-card-v2__image-wrapper {
     aspect-ratio: 1;
+    height: auto;
+    padding-bottom: 0;
   }
   .product-card-v2__image-wrapper::before {
-    display: none; /* прибираємо fallback */
+    display: none;
   }
-  .product-card-v2__image-wrapper > * {
-    position: relative; /* reset */
+  /* Reset image back to relative — заповнить aspect-ratio контейнер */
+  .product-card-v2__image-wrapper > .product-card-v2__image {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
   }
 }
 
@@ -342,6 +349,88 @@
 #tma-root select,
 #tma-root button {
   max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font-size: max(16px, var(--fluid-body)); /* >=16px щоб iOS не зумив */
+}
+
+#tma-root input[type="text"],
+#tma-root input[type="tel"],
+#tma-root input[type="email"],
+#tma-root textarea {
+  width: 100%;
+}
+
+/* ========== CHECKOUT / NP PICKER — зберігаємо оригінальні висоти ========== */
+#tma-root .np-picker__trigger,
+#tma-root .checkout-v3__input,
+#tma-root .np-sheet__search-input,
+#tma-root input[type="tel"],
+#tma-root input[type="text"],
+#tma-root input[type="email"] {
+  min-height: 52px !important;
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+  padding: 0 16px !important;
+}
+
+#tma-root .np-picker {
+  width: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+#tma-root .np-picker__field {
+  width: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+#tma-root .np-sheet {
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: 72vh !important;
+  min-height: 380px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+#tma-root .np-sheet__list {
+  max-height: calc(72vh - 140px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#tma-root .np-sheet__item {
+  padding: 14px 16px !important;
+  min-height: 56px !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+}
+
+/* Checkout steps — не стискати */
+#tma-root .checkout-v3__steps,
+#tma-root .checkout-v3__progress {
+  width: 100%;
+  min-height: 48px;
+}
+
+#tma-root .checkout-v3__step {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Primary CTA в checkout — повна ширина */
+#tma-root .checkout-v3__cta,
+#tma-root .checkout-v3__submit-btn,
+#tma-root .checkout-v3__next-btn {
+  width: 100%;
+  min-height: 52px;
+  font-size: 16px !important;
+  padding: 14px 20px !important;
+}
 
 /* ========== JS-DRIVEN BREAKPOINT CLASSES (universal fallback) ========== */
 /* Встановлюються з App.jsx через ResizeObserver для всіх браузерів */
@@ -440,17 +529,20 @@
   .product-card-v2__image-wrapper::before {
     display: none;
   }
-  .product-card-v2__image-wrapper > .product-card-v2__image,
-  .product-card-v2__image-wrapper > .product-card-v2__badges,
-  .product-card-v2__image-wrapper > .product-card-v2__add-btn,
-  .product-card-v2__image-wrapper > .product-card-v2__favorite {
-    position: absolute;
-  }
+  /* Image заповнює весь wrapper */
   .product-card-v2__image-wrapper > .product-card-v2__image {
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+  }
+  /* Floating UI — залишаємо як в оригінальному CSS (top/left/bottom/right з компонента) */
+  .product-card-v2__image-wrapper > .product-card-v2__badges,
+  .product-card-v2__image-wrapper > .product-card-v2__add-btn,
+  .product-card-v2__image-wrapper > .product-card-v2__favorite {
+    position: absolute;
+    /* не змінюємо top/left/right/bottom — вони задані у компонентних CSS */
   }
 }
 
@@ -467,18 +559,6 @@
   .tma-page-content {
     padding-bottom: calc(96px + env(safe-area-inset-bottom));
   }
-}
-
-  min-width: 0;
-  box-sizing: border-box;
-  font-size: max(16px, var(--fluid-body)); /* >=16px щоб iOS не зумив */
-}
-
-#tma-root input[type="text"],
-#tma-root input[type="tel"],
-#tma-root input[type="email"],
-#tma-root textarea {
-  width: 100%;
 }
 
 /* ========== LONG TEXT PROTECTION ========== */
