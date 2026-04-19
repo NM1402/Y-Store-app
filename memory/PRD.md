@@ -103,3 +103,29 @@
 - ✅ **Fix Search icon overlap**: responsive-fix застосовував `padding: 0 16px !important` до ВСІХ input[type=text], що overрайдило `.search-v2__input { padding-left: 48px }` → іконка лупи накладалась на placeholder. Рішення: scoped правило тільки до `.checkout-v3` і `.auth-form`
 - ✅ **Fix corrupted Search-v2.jsx**: orphan JSX fragments рендерилися як текст (`); }`, `</Page>`) — перезаписав файл чисто
 - ✅ **Merge Product sections**: видалено окремий блок "Доставка" з дублем Нової Пошти. Залишено ОДИН блок "Умови покупки": Швидка доставка + Самовивіз + Повернення 14 днів + Зручна оплата + note про безкоштовну доставку від 2000₴
+
+## Session 7 — Root README for GitHub (2026-04-19)
+- ✅ Створено повноцінний `/app/README.md` (36KB, 817 рядків) — буде показано як головна сторінка GitHub
+- 📋 **Зміст (17 розділів):**
+  1. Що це таке
+  2. Огляд функціональності (для покупця + адміна)
+  3. Стек технологій (повна таблиця версій)
+  4. Структура репозиторію (ASCII tree з коментарями)
+  5. Швидкий старт (2 варіанти)
+  6. Архітектура (ASCII діаграма)
+  7. Інтеграція з сайтом (концепція + код + feature-flag)
+  8. Що вже працює з коробки (status table)
+  9. API Reference (35+ endpoints у 3 таблицях)
+  10. Моделі даних (9 колекцій у collapsible <details>)
+  11. Flows (3 основні з діаграмами)
+  12. Environment variables (повний .env з коментарями)
+  13. Deployment (nginx, supervisor, BotFather, WFP cabinet)
+  14. Тестування (smoke_test + manual curl)
+  15. Документація (лінки на всі 8 MD-файлів)
+  16. FAQ (7 питань у collapsible)
+  17. Про проект + критичні інваріанти
+- ✅ Badges: Telegram bot, Python, FastAPI, React, MongoDB, Status
+- ✅ Table of Contents з anchor links
+- ✅ 9 <details> collapsible блоків для довгого контенту
+- ✅ Створено повний `.gitignore` (Python, Node.js, React build, IDE, logs, emergent artifacts)
+- ✅ Підтверджено: додаток працює, tma-package інтактний
