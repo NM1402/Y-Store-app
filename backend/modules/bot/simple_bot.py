@@ -36,12 +36,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-TMA_URL = os.getenv("TMA_URL", "https://bot-app-deploy.preview.emergentagent.com/tma")
+_app_url = (os.getenv("APP_URL") or "").rstrip("/")
+TMA_URL = os.getenv("TMA_URL") or (f"{_app_url}/tma" if _app_url else "")
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.getenv("DB_NAME", "tma_store")
 
 if not TOKEN:
     raise ValueError("TELEGRAM_BOT_TOKEN not set")
+
+if not TMA_URL:
+    raise ValueError("TMA_URL (or APP_URL) not set")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()

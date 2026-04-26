@@ -45,10 +45,8 @@ from aiogram.types import (
     MenuButtonWebApp,
 )
 
-TMA_URL = os.getenv(
-    "TMA_URL",
-    (os.getenv("APP_URL") or "https://bot-app-deploy.preview.emergentagent.com").rstrip("/") + "/tma",
-)
+_app_url = (os.getenv("APP_URL") or "").rstrip("/")
+TMA_URL = os.getenv("TMA_URL") or (f"{_app_url}/tma" if _app_url else "")
 
 # Configure logging - DEBUG level for troubleshooting
 logging.basicConfig(
@@ -68,6 +66,9 @@ DB_NAME = os.getenv("DB_NAME", "marketplace_db")
 
 if not TOKEN:
     raise ValueError("TELEGRAM_BOT_TOKEN not set in .env")
+
+if not TMA_URL:
+    raise ValueError("TMA_URL (or APP_URL) not set in .env")
 
 # MongoDB
 client = AsyncIOMotorClient(MONGO_URL)
