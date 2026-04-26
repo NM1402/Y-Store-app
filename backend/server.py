@@ -15,7 +15,8 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
 # logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 # DB
@@ -62,7 +63,8 @@ async def lifespan(app: FastAPI):
     logger.info("👋 Shutting down...")
 
 
-app = FastAPI(title="Telegram Mini App API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Telegram Mini App API",
+              version="1.0.0", lifespan=lifespan)
 
 cors_origins = os.environ.get("CORS_ORIGINS", "*").split(",")
 app.add_middleware(
@@ -112,4 +114,8 @@ app.include_router(tma_np_router, prefix="/api", tags=["TMA · Nova Poshta"])
 
 # Telegram BFF — mobile-optimized aggregated endpoints
 from modules.telegram_bff import router as telegram_bff_router  # noqa: E402
+# WayForPay webhook/payment routes
+from modules.payments.wayforpay_routes import router as wayforpay_router  # noqa: E402
 app.include_router(telegram_bff_router, prefix="/api", tags=["Telegram BFF"])
+app.include_router(wayforpay_router, prefix="/api",
+                   tags=["WayForPay Payments"])

@@ -127,7 +127,8 @@ ABOUT_TEXT = """ℹ️ <b>Про Y-Store</b>
 Дякуємо, що обрали Y-Store! 🎉"""
 
 WEBAPP_KB = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text="🛍 Відкрити магазин", web_app=WebAppInfo(url=TMA_URL))]
+    [InlineKeyboardButton(text="🛍 Відкрити магазин",
+                          web_app=WebAppInfo(url=TMA_URL))]
 ])
 
 
@@ -137,12 +138,17 @@ def admin_kb() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="📊 Операційна панель")],
-            [KeyboardButton(text="📦 Замовлення"), KeyboardButton(text="🚚 Доставки")],
+            [KeyboardButton(text="📦 Замовлення"),
+             KeyboardButton(text="🚚 Доставки")],
             [KeyboardButton(text="👤 CRM"), KeyboardButton(text="💰 Фінанси")],
-            [KeyboardButton(text="📦 Майстер ТТН"), KeyboardButton(text="📣 Розсилка")],
-            [KeyboardButton(text="📮 Повернення"), KeyboardButton(text="⚠️ Ризики")],
-            [KeyboardButton(text="📈 Аналітика"), KeyboardButton(text="🛡️ Guard")],
-            [KeyboardButton(text="🧯 Інциденти"), KeyboardButton(text="⚙️ Налаштування")],
+            [KeyboardButton(text="📦 Майстер ТТН"),
+             KeyboardButton(text="📣 Розсилка")],
+            [KeyboardButton(text="📮 Повернення"),
+             KeyboardButton(text="⚠️ Ризики")],
+            [KeyboardButton(text="📈 Аналітика"),
+             KeyboardButton(text="🛡️ Guard")],
+            [KeyboardButton(text="🧯 Інциденти"),
+             KeyboardButton(text="⚙️ Налаштування")],
             [KeyboardButton(text="🚪 Вийти з адмінки")],
         ],
         resize_keyboard=True,
@@ -380,7 +386,8 @@ async def admin_analytics(message: types.Message):
     # Top categories by revenue
     pipe = [
         {"$unwind": "$items"},
-        {"$group": {"_id": "$items.category", "revenue": {"$sum": "$items.price"}, "qty": {"$sum": "$items.quantity"}}},
+        {"$group": {"_id": "$items.category", "revenue": {
+            "$sum": "$items.price"}, "qty": {"$sum": "$items.quantity"}}},
         {"$sort": {"revenue": -1}},
         {"$limit": 5},
     ]
@@ -388,7 +395,8 @@ async def admin_analytics(message: types.Message):
     lines = ["📈 <b>Аналітика — топ категорій</b>\n"]
     if rows:
         for r in rows:
-            lines.append(f"• {r.get('_id') or '—'} — {fmt_money(r.get('revenue'))} · {r.get('qty')} шт")
+            lines.append(
+                f"• {r.get('_id') or '—'} — {fmt_money(r.get('revenue'))} · {r.get('qty')} шт")
     else:
         lines.append("Ще немає замовлень для аналітики.")
     await message.answer("\n".join(lines), parse_mode="HTML")
@@ -466,7 +474,8 @@ async def set_bot_info():
             BotCommand(command="shop", description="🛍 Відкрити магазин"),
             BotCommand(command="help", description="❓ Допомога"),
             BotCommand(command="about", description="ℹ️ Про магазин"),
-            BotCommand(command="be_admin", description="🛡 Активувати адмін-панель"),
+            BotCommand(command="be_admin",
+                       description="🛡 Активувати адмін-панель"),
         ]
         await bot.set_my_commands(commands)
         logger.info("✅ Bot commands set")

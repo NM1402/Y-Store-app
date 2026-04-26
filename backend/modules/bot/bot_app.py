@@ -2,6 +2,25 @@
 O9-O12: Telegram Admin Bot Main Application
 Runs as separate process: python -m modules.bot.bot_app
 """
+from aiogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    WebAppInfo,
+    MenuButtonWebApp,
+)
+from modules.bot.handlers.returns_handler import router as returns_router
+from modules.bot.handlers.pickup_control_handler import router as pickup_control_router
+from modules.automation.automation_engine import AutomationEngine
+from modules.bot.wizards.incidents_wizard import IncidentsWizard
+from modules.bot.wizards.broadcast_wizard import BroadcastWizard
+from modules.bot.wizards.ttn_wizard import TTNWizard
+from modules.bot.bot_keyboards import main_menu, wizards_menu, settings_menu_kb, cancel_kb
+from modules.bot.alerts_worker import AlertsWorker
+from modules.bot.bot_actions_service import BotActionsService
+from modules.bot.bot_audit_repo import BotAuditRepo
+from modules.bot.bot_sessions_repo import BotSessionsRepo
+from modules.bot.bot_alerts_repo import BotAlertsRepo
+from modules.bot.bot_settings_repo import BotSettingsRepo
 import asyncio
 import os
 import logging
@@ -17,33 +36,13 @@ ROOT_DIR = Path(__file__).parent.parent.parent
 load_dotenv(ROOT_DIR / '.env')
 
 # Import bot modules
-from modules.bot.bot_settings_repo import BotSettingsRepo
-from modules.bot.bot_alerts_repo import BotAlertsRepo
-from modules.bot.bot_sessions_repo import BotSessionsRepo
-from modules.bot.bot_audit_repo import BotAuditRepo
-from modules.bot.bot_actions_service import BotActionsService
-from modules.bot.alerts_worker import AlertsWorker
-from modules.bot.bot_keyboards import main_menu, wizards_menu, settings_menu_kb, cancel_kb
 
-from modules.bot.wizards.ttn_wizard import TTNWizard
-from modules.bot.wizards.broadcast_wizard import BroadcastWizard
-from modules.bot.wizards.incidents_wizard import IncidentsWizard
-
-from modules.automation.automation_engine import AutomationEngine
 
 # O20.2: Pickup Control Handler
-from modules.bot.handlers.pickup_control_handler import router as pickup_control_router
 
 # O20.3: Returns Handler
-from modules.bot.handlers.returns_handler import router as returns_router
 
 # Telegram Mini App integration
-from aiogram.types import (
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    WebAppInfo,
-    MenuButtonWebApp,
-)
 
 _app_url = (os.getenv("APP_URL") or "").rstrip("/")
 TMA_URL = os.getenv("TMA_URL") or (f"{_app_url}/tma" if _app_url else "")
@@ -114,7 +113,8 @@ async def cmd_debug(message: types.Message):
         f"Chat Type: {message.chat.type}\n"
     )
     await message.answer(info, parse_mode="HTML")
-    logger.info(f"DEBUG: chat_id={message.chat.id}, user_id={message.from_user.id}")
+    logger.info(
+        f"DEBUG: chat_id={message.chat.id}, user_id={message.from_user.id}")
 
 
 # ============= COMMAND HANDLERS =============
@@ -285,7 +285,7 @@ async def menu_dashboard(message: types.Message):
     orders_count = await db["orders"].count_documents({})
     shipped_count = await db["orders"].count_documents({"status": "SHIPPED"})
     customers_count = await db["customers"].count_documents({})
-    
+
     await message.answer(
         f"📊 <b>Операційна панель</b>\n\n"
         f"📦 Всього замовлень: <b>{orders_count}</b>\n"
@@ -303,18 +303,18 @@ async def menu_orders(message: types.Message):
         {},
         {"_id": 0, "id": 1, "status": 1, "totals.grand": 1, "created_at": 1}
     ).sort("created_at", -1).limit(5).to_list(5)
-    
+
     if not orders:
         await message.answer("📦 Замовлень поки немає.")
         return
-    
+
     text = "📦 <b>Останні замовлення:</b>\n\n"
     for o in orders:
         oid = o.get("id", "")[:8]
         status = o.get("status", "-")
         amount = o.get("totals", {}).get("grand", 0)
         text += f"• <code>{oid}</code> | {status} | {float(amount):.0f} грн\n"
-    
+
     await message.answer(text, parse_mode="HTML")
 
 
@@ -325,18 +325,18 @@ async def menu_deliveries(message: types.Message):
         {"status": "SHIPPED", "shipment.ttn": {"$exists": True}},
         {"_id": 0, "id": 1, "shipment.ttn": 1, "shipping.city": 1}
     ).sort("shipment.created_at", -1).limit(5).to_list(5)
-    
+
     if not orders:
         await message.answer("🚚 Активних доставок немає.")
         return
-    
+
     text = "🚚 <b>Активні доставки:</b>\n\n"
     for o in orders:
         oid = o.get("id", "")[:8]
         ttn = o.get("shipment", {}).get("ttn", "-")
         city = o.get("shipping", {}).get("city", "-")
         text += f"• <code>{ttn}</code> | #{oid} | {city}\n"
-    
+
     await message.answer(text, parse_mode="HTML")
 
 
@@ -363,7 +363,7 @@ async def menu_finance(message: types.Message):
         }}
     ]
     results = await db["finance_ledger"].aggregate(pipeline).to_list(10)
-    
+
     income = 0
     expense = 0
     for r in results:
@@ -371,9 +371,9 @@ async def menu_finance(message: types.Message):
             income = r["total"]
         elif r["_id"] == "OUT":
             expense = r["total"]
-    
+
     net = income - expense
-    
+
     await message.answer(
         f"💰 <b>Фінанси</b>\n\n"
         f"📈 Дохід: <b>{income:,.2f} грн</b>\n"
@@ -397,7 +397,8 @@ async def menu_broadcast(message: types.Message):
     await message.answer(
         "📣 <b>Майстер розсилки</b>\n\n"
         "Оберіть сегмент отримувачів:",
-        reply_markup=broadcast_wizard.db["bot_keyboards"].segment_kb() if hasattr(broadcast_wizard.db, "bot_keyboards") else None,
+        reply_markup=broadcast_wizard.db["bot_keyboards"].segment_kb(
+        ) if hasattr(broadcast_wizard.db, "bot_keyboards") else None,
         parse_mode="HTML"
     )
     # Direct import workaround
@@ -414,23 +415,23 @@ async def menu_incidents(message: types.Message):
     """Start incidents wizard via fake callback"""
     # Create fake callback-like behavior
     await sessions_repo.set_state(message.from_user.id, "INC:ROOT", {})
-    
+
     # Just call the start logic directly
     from datetime import datetime, timezone, timedelta
-    
+
     incidents = []
     now = datetime.now(timezone.utc)
-    
+
     thr = (now - timedelta(hours=48)).isoformat()
     delayed = await db["orders"].find(
         {"status": "SHIPPED", "shipment.created_at": {"$lte": thr}},
         {"_id": 0, "id": 1, "shipment.ttn": 1}
     ).limit(5).to_list(5)
-    
+
     for o in delayed:
         ttn = o.get("shipment", {}).get("ttn", "-")
         incidents.append(f"⏳ #{o['id'][:8]} ТТН {ttn}")
-    
+
     if not incidents:
         await message.answer("✅ Інцидентів немає! Все добре 👌")
     else:
@@ -446,7 +447,7 @@ async def menu_settings(message: types.Message):
     """Settings menu"""
     settings = await settings_repo.get()
     thresholds = settings.get("thresholds", {})
-    
+
     await message.answer(
         f"⚙️ <b>Налаштування</b>\n\n"
         f"<b>Поточні пороги:</b>\n"
@@ -465,9 +466,9 @@ async def menu_settings(message: types.Message):
 async def menu_pickup_control(message: types.Message):
     """Pickup control - at-risk parcels"""
     from datetime import datetime, timezone, timedelta
-    
+
     now = datetime.now(timezone.utc)
-    
+
     # Get shipments at risk (days_at_point >= 3)
     at_risk = await db["orders"].find(
         {
@@ -476,7 +477,7 @@ async def menu_pickup_control(message: types.Message):
         },
         {"_id": 0, "id": 1, "shipment": 1, "totals": 1, "total_amount": 1}
     ).sort("shipment.days_at_point", -1).limit(10).to_list(10)
-    
+
     if not at_risk:
         await message.answer(
             "📮 <b>Контроль повернень</b>\n\n"
@@ -485,26 +486,27 @@ async def menu_pickup_control(message: types.Message):
             parse_mode="HTML"
         )
         return
-    
+
     total_risk_amount = 0
     text = "📮 <b>Контроль повернень</b>\n\n"
     text += f"⚠️ <b>Посилок під ризиком: {len(at_risk)}</b>\n\n"
-    
+
     for o in at_risk:
         oid = o.get("id", "")[:8]
         shipment = o.get("shipment") or {}
         days = shipment.get("days_at_point", 0)
         ttn = shipment.get("ttn", "-")
-        amount = float((o.get("totals") or {}).get("grand") or o.get("total_amount") or 0)
+        amount = float((o.get("totals") or {}).get(
+            "grand") or o.get("total_amount") or 0)
         total_risk_amount += amount
-        
+
         risk_emoji = "🔴" if days >= 5 else "🟡"
         text += f"{risk_emoji} #{oid} | ТТН <code>{ttn}</code>\n"
         text += f"   📅 Днів: {days} | 💰 {amount:.0f} грн\n"
-    
+
     text += f"\n💰 <b>Під ризиком:</b> {total_risk_amount:,.0f} грн"
     text += "\n\n💡 Використайте веб-панель для масової розсилки нагадувань."
-    
+
     await message.answer(text, parse_mode="HTML")
 
 
@@ -513,13 +515,13 @@ async def menu_pickup_control(message: types.Message):
 @dp.message(F.text == "⚠️ Ризики")
 async def menu_risk_scores(message: types.Message):
     """Risk scores - high-risk customers"""
-    
+
     # Get high-risk customers
     high_risk = await db["users"].find(
         {"risk.band": "RISK"},
         {"_id": 0, "id": 1, "email": 1, "phone": 1, "full_name": 1, "risk": 1}
     ).sort("risk.score", -1).limit(10).to_list(10)
-    
+
     if not high_risk:
         await message.answer(
             "⚠️ <b>Ризикові клієнти</b>\n\n"
@@ -528,21 +530,22 @@ async def menu_risk_scores(message: types.Message):
             parse_mode="HTML"
         )
         return
-    
+
     text = "⚠️ <b>Ризикові клієнти</b>\n\n"
     text += f"🔴 <b>Знайдено: {len(high_risk)}</b>\n\n"
-    
+
     for c in high_risk:
-        name = c.get("full_name") or c.get("email") or c.get("phone") or "Невідомий"
+        name = c.get("full_name") or c.get(
+            "email") or c.get("phone") or "Невідомий"
         risk = c.get("risk") or {}
         score = risk.get("score", 0)
         reasons = ", ".join(risk.get("reasons", [])) or "-"
-        
+
         text += f"🚨 <b>{name}</b>\n"
         text += f"   Скор: {score}/100 | {reasons}\n"
-    
+
     text += "\n💡 Деталі та дії - у веб-панелі CRM."
-    
+
     await message.answer(text, parse_mode="HTML")
 
 
@@ -552,14 +555,15 @@ async def menu_risk_scores(message: types.Message):
 async def menu_analytics(message: types.Message):
     """Analytics intelligence - daily KPIs"""
     from datetime import datetime, timezone, timedelta
-    
+
     today = datetime.now(timezone.utc).date().isoformat()
-    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).date().isoformat()
-    
+    yesterday = (datetime.now(timezone.utc) -
+                 timedelta(days=1)).date().isoformat()
+
     # Get today's analytics
     today_stats = await db["analytics_daily"].find_one({"date": today}, {"_id": 0})
     yday_stats = await db["analytics_daily"].find_one({"date": yesterday}, {"_id": 0})
-    
+
     # Fallback to real-time if no daily snapshot
     if not today_stats:
         # Calculate real-time
@@ -567,45 +571,50 @@ async def menu_analytics(message: types.Message):
             "created_at": {"$gte": today}
         })
         revenue_pipeline = [
-            {"$match": {"created_at": {"$gte": today}, "payment_status": {"$in": ["paid", "completed"]}}},
+            {"$match": {"created_at": {"$gte": today},
+                        "payment_status": {"$in": ["paid", "completed"]}}},
             {"$group": {"_id": None, "total": {"$sum": "$total_amount"}}}
         ]
         rev_result = await db["orders"].aggregate(revenue_pipeline).to_list(1)
         revenue_today = rev_result[0]["total"] if rev_result else 0
-        
+
         customers_today = await db["users"].count_documents({
             "created_at": {"$gte": today}
         })
-        
+
         today_stats = {
             "orders": orders_today,
             "revenue": revenue_today,
             "new_customers": customers_today
         }
-    
+
     orders = today_stats.get("orders") or today_stats.get("orders_count", 0)
     revenue = today_stats.get("revenue") or today_stats.get("revenue_total", 0)
     customers = today_stats.get("new_customers", 0)
     aov = revenue / orders if orders > 0 else 0
-    
+
     # Yesterday comparison
-    yday_orders = (yday_stats.get("orders") or yday_stats.get("orders_count", 0)) if yday_stats else 0
-    yday_revenue = (yday_stats.get("revenue") or yday_stats.get("revenue_total", 0)) if yday_stats else 0
-    
-    orders_diff = ((orders - yday_orders) / yday_orders * 100) if yday_orders > 0 else 0
-    revenue_diff = ((revenue - yday_revenue) / yday_revenue * 100) if yday_revenue > 0 else 0
-    
+    yday_orders = (yday_stats.get("orders") or yday_stats.get(
+        "orders_count", 0)) if yday_stats else 0
+    yday_revenue = (yday_stats.get("revenue") or yday_stats.get(
+        "revenue_total", 0)) if yday_stats else 0
+
+    orders_diff = ((orders - yday_orders) / yday_orders *
+                   100) if yday_orders > 0 else 0
+    revenue_diff = ((revenue - yday_revenue) / yday_revenue *
+                    100) if yday_revenue > 0 else 0
+
     orders_emoji = "📈" if orders_diff >= 0 else "📉"
     revenue_emoji = "📈" if revenue_diff >= 0 else "📉"
-    
+
     text = "📈 <b>Аналітика сьогодні</b>\n\n"
     text += f"📦 <b>Замовлень:</b> {orders} {orders_emoji} {orders_diff:+.1f}%\n"
     text += f"💰 <b>Виручка:</b> {revenue:,.0f} грн {revenue_emoji} {revenue_diff:+.1f}%\n"
     text += f"🧾 <b>Середній чек:</b> {aov:,.0f} грн\n"
     text += f"👥 <b>Нових клієнтів:</b> {customers}\n"
-    
+
     text += "\n💡 Повна аналітика у веб-панелі."
-    
+
     await message.answer(text, parse_mode="HTML")
 
 
@@ -614,13 +623,13 @@ async def menu_analytics(message: types.Message):
 @dp.message(F.text == "🛡️ Guard")
 async def menu_guard(message: types.Message):
     """Guard - fraud & KPI alerts"""
-    
+
     # Get open incidents
     open_incidents = await db["guard_incidents"].find(
         {"status": "OPEN"},
         {"_id": 0}
     ).sort("created_at", -1).limit(10).to_list(10)
-    
+
     if not open_incidents:
         await message.answer(
             "🛡️ <b>Guard - Захист</b>\n\n"
@@ -633,24 +642,25 @@ async def menu_guard(message: types.Message):
             parse_mode="HTML"
         )
         return
-    
+
     text = "🛡️ <b>Guard - Інциденти</b>\n\n"
     text += f"🚨 <b>Відкрито: {len(open_incidents)}</b>\n\n"
-    
+
     for inc in open_incidents[:5]:  # Show max 5
         severity = inc.get("severity", "INFO")
-        sev_emoji = {"CRITICAL": "🔴", "WARNING": "🟡", "INFO": "🔵"}.get(severity, "⚪")
+        sev_emoji = {"CRITICAL": "🔴", "WARNING": "🟡",
+                     "INFO": "🔵"}.get(severity, "⚪")
         title = inc.get("title", "Incident")
         inc_type = inc.get("type", "-")
-        
+
         text += f"{sev_emoji} <b>{title}</b>\n"
         text += f"   Тип: {inc_type}\n"
-    
+
     if len(open_incidents) > 5:
         text += f"\n... та ще {len(open_incidents) - 5} інцидентів"
-    
+
     text += "\n\n💡 Деталі та дії - у веб-панелі."
-    
+
     await message.answer(text, parse_mode="HTML")
 
 
@@ -791,10 +801,10 @@ async def cb_create_ttn(callback: types.CallbackQuery):
     """Create TTN from alert"""
     order_id = callback.data.split(":")[1]
     await audit_repo.log(callback.from_user.id, f"ACTION_CREATE_TTN:{order_id}")
-    
+
     await callback.message.answer(f"⏳ Створюю ТТН для {order_id}...")
     result = await actions_service.create_ttn(order_id)
-    
+
     if result.get("ok"):
         ttn = result.get("ttn", "")
         await callback.message.answer(
@@ -804,7 +814,7 @@ async def cb_create_ttn(callback: types.CallbackQuery):
         )
     else:
         await callback.message.answer(f"❌ Помилка: {result.get('error', 'Unknown')}")
-    
+
     await callback.answer()
 
 
@@ -813,9 +823,9 @@ async def cb_mark_block(callback: types.CallbackQuery):
     """Block customer"""
     order_id = callback.data.split(":")[1]
     await audit_repo.log(callback.from_user.id, f"ACTION_BLOCK:{order_id}")
-    
+
     result = await actions_service.block_customer(order_id)
-    
+
     if result.get("ok"):
         await callback.answer("🚫 Клієнта заблоковано!", show_alert=True)
     else:
@@ -827,7 +837,7 @@ async def cb_refresh_ttn(callback: types.CallbackQuery):
     """Refresh TTN status"""
     order_id = callback.data.split(":")[1]
     result = await actions_service.refresh_tracking(order_id)
-    
+
     if result.get("ok"):
         await callback.answer("🔄 Статус оновлено!")
     else:
@@ -839,7 +849,7 @@ async def cb_send_sms(callback: types.CallbackQuery):
     """Send SMS to customer"""
     order_id = callback.data.split(":")[1]
     result = await actions_service.send_sms(order_id)
-    
+
     if result.get("ok"):
         await callback.answer("📨 SMS поставлено в чергу!", show_alert=True)
     else:
@@ -851,7 +861,7 @@ async def cb_print_pdf(callback: types.CallbackQuery):
     """Get PDF URL"""
     ttn = callback.data.split(":")[1]
     url = await actions_service.get_pdf_url(ttn)
-    
+
     await callback.message.answer(
         f"🖨 PDF етикетка: {url}",
         parse_mode="HTML"
@@ -900,7 +910,8 @@ async def cb_view_order(callback: types.CallbackQuery):
         "cash_on_delivery": "💵 Накладений платіж",
         "cash": "💵 Готівка",
     }
-    pay_method_ua = pay_method_map.get(o.get("payment_method", ""), o.get("payment_method", "—"))
+    pay_method_ua = pay_method_map.get(
+        o.get("payment_method", ""), o.get("payment_method", "—"))
 
     text_parts = [
         f"📋 <b>Деталі замовлення</b>",
@@ -924,7 +935,8 @@ async def cb_view_order(callback: types.CallbackQuery):
         f"{deliv.get('warehouse_name', '—')}",
     ])
     if deliv.get("tracking_number"):
-        text_parts.append(f"📦 ТТН: <code>{deliv.get('tracking_number')}</code>")
+        text_parts.append(
+            f"📦 ТТН: <code>{deliv.get('tracking_number')}</code>")
 
     text_parts.extend([
         f"",
@@ -939,9 +951,11 @@ async def cb_view_order(callback: types.CallbackQuery):
     ])
 
     if pay.get("checkout_url") and o.get("status") == "pending_payment":
-        text_parts.append(f"🔗 <a href=\"{pay['checkout_url']}\">Посилання на оплату</a>")
+        text_parts.append(
+            f"🔗 <a href=\"{pay['checkout_url']}\">Посилання на оплату</a>")
     if pay.get("paid_at"):
-        text_parts.append(f"✅ Оплачено: {pay['paid_at'][:19].replace('T', ' ')}")
+        text_parts.append(
+            f"✅ Оплачено: {pay['paid_at'][:19].replace('T', ' ')}")
 
     text = "\n".join(text_parts)
 
@@ -957,20 +971,26 @@ async def cb_view_order(callback: types.CallbackQuery):
     elif tg_id and not str(tg_id).startswith("sandbox"):
         contact_url = f"tg://user?id={tg_id}"
     if contact_url:
-        kb_rows.append([types.InlineKeyboardButton(text="💬 Написати клієнту", url=contact_url)])
+        kb_rows.append([types.InlineKeyboardButton(
+            text="💬 Написати клієнту", url=contact_url)])
 
     if o.get("status") in ("paid", "new") and not deliv.get("tracking_number"):
-        kb_rows.append([types.InlineKeyboardButton(text="📦 Створити ТТН", callback_data=f"create_ttn:{order_id}")])
+        kb_rows.append([types.InlineKeyboardButton(
+            text="📦 Створити ТТН", callback_data=f"create_ttn:{order_id}")])
     if deliv.get("tracking_number"):
         kb_rows.append([
-            types.InlineKeyboardButton(text="🔄 Оновити статус", callback_data=f"refresh_ttn:{order_id}"),
-            types.InlineKeyboardButton(text="🖨 PDF", callback_data=f"print_pdf:{deliv['tracking_number']}"),
+            types.InlineKeyboardButton(
+                text="🔄 Оновити статус", callback_data=f"refresh_ttn:{order_id}"),
+            types.InlineKeyboardButton(
+                text="🖨 PDF", callback_data=f"print_pdf:{deliv['tracking_number']}"),
         ])
     kb_rows.append([
-        types.InlineKeyboardButton(text="📨 SMS клієнту", callback_data=f"send_sms:{order_id}"),
+        types.InlineKeyboardButton(
+            text="📨 SMS клієнту", callback_data=f"send_sms:{order_id}"),
     ])
     kb_rows.append([
-        types.InlineKeyboardButton(text="🚫 Блокувати клієнта", callback_data=f"mark_block:{order_id}"),
+        types.InlineKeyboardButton(
+            text="🚫 Блокувати клієнта", callback_data=f"mark_block:{order_id}"),
     ])
     kb = types.InlineKeyboardMarkup(inline_keyboard=kb_rows)
 
@@ -989,19 +1009,19 @@ async def handle_text(message: types.Message):
     """Handle text based on current state"""
     session = await sessions_repo.get(message.from_user.id)
     state = session.get("state", "")
-    
+
     # TTN wizard
     if state and state.startswith("TTN:"):
         handled = await ttn_wizard.handle_text(message)
         if handled:
             return
-    
+
     # Broadcast wizard
     if state and state.startswith("BLAST:"):
         handled = await broadcast_wizard.handle_text(message)
         if handled:
             return
-    
+
     # CRM search
     if state == "CRM:SEARCH":
         phone = message.text.strip()
@@ -1009,7 +1029,7 @@ async def handle_text(message: types.Message):
             {"phone": {"$regex": phone, "$options": "i"}},
             {"_id": 0}
         )
-        
+
         if customer:
             tags = ", ".join(customer.get("tags", [])) or "-"
             await message.answer(
@@ -1024,10 +1044,10 @@ async def handle_text(message: types.Message):
             )
         else:
             await message.answer("❌ Клієнта не знайдено.")
-        
+
         await sessions_repo.clear(message.from_user.id)
         return
-    
+
     # Default - show hint
     await message.answer(
         "ℹ️ Надішліть /menu для головного меню."
@@ -1040,7 +1060,7 @@ async def alerts_loop():
     """Background loop for sending alerts"""
     await alerts_worker.init()
     logger.info("🔔 Alerts worker started")
-    
+
     while True:
         try:
             result = await alerts_worker.process_once()
@@ -1048,7 +1068,7 @@ async def alerts_loop():
                 logger.info(f"Alerts processed: {result}")
         except Exception as e:
             logger.error(f"Alerts worker error: {e}")
-        
+
         await asyncio.sleep(10)
 
 
@@ -1056,7 +1076,7 @@ async def automation_loop():
     """Background loop for automation engine"""
     await automation_engine.init()
     logger.info("🤖 Automation engine started")
-    
+
     while True:
         try:
             result = await automation_engine.run_once()
@@ -1064,7 +1084,7 @@ async def automation_loop():
                 logger.info(f"Automation run: {result}")
         except Exception as e:
             logger.error(f"Automation engine error: {e}")
-        
+
         await asyncio.sleep(600)  # Every 10 minutes
 
 
@@ -1075,30 +1095,30 @@ async def main():
     print("=" * 50)
     print("🚀 Y-Store Telegram Admin Bot")
     print("=" * 50)
-    
+
     logger.info("🚀 Starting Y-Store Telegram Admin Bot...")
     logger.info(f"Bot token: {TOKEN[:20]}...{TOKEN[-10:]}")
     logger.info(f"MongoDB: {MONGO_URL}")
     logger.info(f"DB: {DB_NAME}")
-    
+
     # Get bot info
     bot_info = await bot.get_me()
     logger.info(f"✅ Bot connected: @{bot_info.username} (ID: {bot_info.id})")
     print(f"✅ Bot: @{bot_info.username}")
-    
+
     # Initialize repos
     await alerts_repo.ensure_indexes()
     await sessions_repo.ensure_indexes()
     await audit_repo.ensure_indexes()
     logger.info("✅ Indexes created")
-    
+
     # Get current settings
     settings = await settings_repo.get()
     chat_ids = settings.get("admin_chat_ids", [])
     user_ids = settings.get("admin_user_ids", [])
     logger.info(f"📬 Admin chat_ids: {chat_ids}")
     logger.info(f"👤 Admin user_ids: {user_ids}")
-    
+
     # Start background tasks
     asyncio.create_task(alerts_loop())
     asyncio.create_task(automation_loop())
@@ -1119,9 +1139,9 @@ async def main():
     print("✅ Bot ready! Starting polling...")
     print("Commands: /start, /menu, /shop, /wizards, /debug, /help")
     print("=" * 50)
-    
+
     logger.info("✅ Bot ready, starting polling...")
-    
+
     # Start polling with drop_pending_updates to avoid old messages
     await dp.start_polling(bot, drop_pending_updates=True)
 
@@ -1129,4 +1149,3 @@ async def main():
 if __name__ == "__main__":
     print("\n🤖 Launching Telegram Admin Bot...\n")
     asyncio.run(main())
-
