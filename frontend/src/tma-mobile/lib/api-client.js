@@ -175,11 +175,11 @@ class APIClient {
 
   // Search — вызывает main backend
   async searchSuggest(query) {
-    return this.mainAxios.get("/search/suggest", { params: { q: query } });
+    return this.mainAxios.get("/v2/search/suggest", { params: { q: query } });
   }
 
   async searchProducts(query) {
-    return this.mainAxios.get("/search", { params: { q: query } });
+    return this.mainAxios.get("/v2/search", { params: { q: query } });
   }
 
   // Cart (main backend)
