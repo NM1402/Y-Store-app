@@ -70,35 +70,44 @@ async def google_auth(request: GoogleAuthRequest, response: Response):
                 headers={"X-Session-ID": request.session_id},
                 timeout=10.0
             )
-        
+
         if auth_response.status_code != 200:
-            logger.error(f"Emergent Auth error: {auth_response.status_code} - {auth_response.text}")
+            logger.error(
+                f"Emergent Auth error: {auth_response.status_code} - {auth_response.text}")
             raise HTTPException(status_code=401, detail="Invalid session_id")
-        
+
         auth_data = auth_response.json()
         email = auth_data.get("email")
         name = auth_data.get("name")
         picture = auth_data.get("picture")
         session_token = auth_data.get("session_token")
-        
+
         if not email:
-            raise HTTPException(status_code=401, detail="Email not provided by Google")
-        
+            raise HTTPException(
+                status_code=401, detail="Email not provided by Google")
+        if not session_token:
+            # Fallback for edge cases when external auth does not return session token
+            session_token = str(uuid.uuid4())
+
         # Find or create user
         existing_user = await db.users.find_one({"email": email}, {"_id": 0})
-        
+
         if existing_user:
             # Update existing user with Google data
+            user_id = existing_user.get("id")
+            if not user_id:
+                # Backward compatibility for legacy users that were created without `id`
+                user_id = str(uuid.uuid4())
             await db.users.update_one(
                 {"email": email},
                 {"$set": {
+                    "id": user_id,
                     "google_id": auth_data.get("id"),
                     "full_name": name or existing_user.get("full_name"),
                     "picture": picture,
                     "updated_at": datetime.now(timezone.utc).isoformat()
                 }}
             )
-            user_id = existing_user["id"]
         else:
             # Create new user
             user_id = str(uuid.uuid4())
@@ -114,17 +123,19 @@ async def google_auth(request: GoogleAuthRequest, response: Response):
             }
             await db.users.insert_one(new_user)
             logger.info(f"Created new user via Google OAuth: {email}")
-        
+
         # Create session
-        expires_at = datetime.now(timezone.utc) + timedelta(days=SESSION_EXPIRY_DAYS)
-        await db.user_sessions.delete_many({"user_id": user_id})  # Clear old sessions
+        expires_at = datetime.now(timezone.utc) + \
+            timedelta(days=SESSION_EXPIRY_DAYS)
+        # Clear old sessions
+        await db.user_sessions.delete_many({"user_id": user_id})
         await db.user_sessions.insert_one({
             "user_id": user_id,
             "session_token": session_token,
             "expires_at": expires_at,
             "created_at": datetime.now(timezone.utc)
         })
-        
+
         # Set httpOnly cookie
         response.set_cookie(
             key="session_token",
@@ -135,18 +146,21 @@ async def google_auth(request: GoogleAuthRequest, response: Response):
             samesite="none",
             max_age=SESSION_EXPIRY_DAYS * 24 * 60 * 60
         )
-        
+
         # Get updated user
         user_doc = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
-        
+
         return GoogleAuthResponse(
             access_token=session_token,
             user=user_doc
         )
-        
+
+    except HTTPException:
+        raise
     except httpx.RequestError as e:
         logger.error(f"Request error during Google auth: {e}")
-        raise HTTPException(status_code=503, detail="Authentication service unavailable")
+        raise HTTPException(
+            status_code=503, detail="Authentication service unavailable")
     except Exception as e:
         logger.error(f"Google auth error: {e}")
         raise HTTPException(status_code=500, detail="Authentication failed")
@@ -159,45 +173,45 @@ async def get_current_user_v2(request: Request):
     """
     # Try cookie first
     session_token = request.cookies.get("session_token")
-    
+
     # Fallback to Authorization header
     if not session_token:
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
             session_token = auth_header[7:]
-    
+
     if not session_token:
         raise HTTPException(status_code=401, detail="Not authenticated")
-    
+
     # Find session
     session = await db.user_sessions.find_one(
         {"session_token": session_token},
         {"_id": 0}
     )
-    
+
     if not session:
         raise HTTPException(status_code=401, detail="Invalid session")
-    
+
     # Check expiry
     expires_at = session["expires_at"]
     if isinstance(expires_at, str):
         expires_at = datetime.fromisoformat(expires_at)
     if expires_at.tzinfo is None:
         expires_at = expires_at.replace(tzinfo=timezone.utc)
-    
+
     if expires_at < datetime.now(timezone.utc):
         await db.user_sessions.delete_one({"session_token": session_token})
         raise HTTPException(status_code=401, detail="Session expired")
-    
+
     # Get user
     user = await db.users.find_one(
         {"id": session["user_id"]},
         {"_id": 0, "password_hash": 0}
     )
-    
+
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     return user
 
 
@@ -207,10 +221,10 @@ async def logout(request: Request, response: Response):
     Logout user - clear session
     """
     session_token = request.cookies.get("session_token")
-    
+
     if session_token:
         await db.user_sessions.delete_many({"session_token": session_token})
-    
+
     response.delete_cookie(
         key="session_token",
         path="/",
@@ -218,7 +232,7 @@ async def logout(request: Request, response: Response):
         httponly=True,
         samesite="none"
     )
-    
+
     return {"message": "Logged out successfully"}
 
 
@@ -233,11 +247,11 @@ async def register_email_password(data: EmailPasswordRegister, response: Respons
     existing = await db.users.find_one({"email": data.email})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
-    
+
     # Create user
     user_id = str(uuid.uuid4())
     password_hash = get_password_hash(data.password)
-    
+
     user_doc = {
         "id": user_id,
         "email": data.email,
@@ -248,20 +262,21 @@ async def register_email_password(data: EmailPasswordRegister, response: Respons
         "verified": False,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
-    
+
     await db.users.insert_one(user_doc)
-    
+
     # Create session
     session_token = str(uuid.uuid4())
-    expires_at = datetime.now(timezone.utc) + timedelta(days=SESSION_EXPIRY_DAYS)
-    
+    expires_at = datetime.now(timezone.utc) + \
+        timedelta(days=SESSION_EXPIRY_DAYS)
+
     await db.user_sessions.insert_one({
         "user_id": user_id,
         "session_token": session_token,
         "expires_at": expires_at,
         "created_at": datetime.now(timezone.utc)
     })
-    
+
     # Set cookie
     response.set_cookie(
         key="session_token",
@@ -272,10 +287,10 @@ async def register_email_password(data: EmailPasswordRegister, response: Respons
         samesite="none",
         max_age=SESSION_EXPIRY_DAYS * 24 * 60 * 60
     )
-    
+
     user_doc.pop("password_hash", None)
     user_doc.pop("_id", None)
-    
+
     return {
         "access_token": session_token,
         "token_type": "bearer",
@@ -289,31 +304,33 @@ async def login_email_password(data: EmailPasswordLogin, response: Response):
     Login with email/password
     """
     user_doc = await db.users.find_one({"email": data.email})
-    
+
     if not user_doc:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    
+
     if not user_doc.get("password_hash"):
-        raise HTTPException(status_code=401, detail="Please use Google login for this account")
-    
+        raise HTTPException(
+            status_code=401, detail="Please use Google login for this account")
+
     if not verify_password(data.password, user_doc["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    
+
     user_id = user_doc["id"]
-    
+
     # Clear old sessions and create new
     await db.user_sessions.delete_many({"user_id": user_id})
-    
+
     session_token = str(uuid.uuid4())
-    expires_at = datetime.now(timezone.utc) + timedelta(days=SESSION_EXPIRY_DAYS)
-    
+    expires_at = datetime.now(timezone.utc) + \
+        timedelta(days=SESSION_EXPIRY_DAYS)
+
     await db.user_sessions.insert_one({
         "user_id": user_id,
         "session_token": session_token,
         "expires_at": expires_at,
         "created_at": datetime.now(timezone.utc)
     })
-    
+
     # Set cookie
     response.set_cookie(
         key="session_token",
@@ -324,10 +341,10 @@ async def login_email_password(data: EmailPasswordLogin, response: Response):
         samesite="none",
         max_age=SESSION_EXPIRY_DAYS * 24 * 60 * 60
     )
-    
+
     user_doc.pop("password_hash", None)
     user_doc.pop("_id", None)
-    
+
     return {
         "access_token": session_token,
         "token_type": "bearer",
@@ -345,10 +362,10 @@ async def create_guest_session(data: GuestCheckoutRequest):
     """
     if not data.phone:
         raise HTTPException(status_code=400, detail="Phone number is required")
-    
+
     guest_id = f"guest_{uuid.uuid4().hex[:12]}"
     guest_token = f"guest_{uuid.uuid4().hex}"
-    
+
     # Store guest session
     guest_doc = {
         "guest_id": guest_id,
@@ -357,13 +374,14 @@ async def create_guest_session(data: GuestCheckoutRequest):
         "phone": data.phone,
         "full_name": data.full_name,
         "created_at": datetime.now(timezone.utc),
-        "expires_at": datetime.now(timezone.utc) + timedelta(hours=24)  # 24h expiry
+        # 24h expiry
+        "expires_at": datetime.now(timezone.utc) + timedelta(hours=24)
     }
-    
+
     await db.guest_sessions.insert_one(guest_doc)
-    
+
     logger.info(f"Created guest session: {guest_id}")
-    
+
     return GuestCheckoutResponse(
         guest_token=guest_token,
         guest_id=guest_id
@@ -379,20 +397,20 @@ async def get_guest_session(guest_token: str):
         {"guest_token": guest_token},
         {"_id": 0}
     )
-    
+
     if not guest:
         raise HTTPException(status_code=404, detail="Guest session not found")
-    
+
     # Check expiry
     expires_at = guest["expires_at"]
     if isinstance(expires_at, datetime):
         if expires_at.tzinfo is None:
             expires_at = expires_at.replace(tzinfo=timezone.utc)
-    
+
     if expires_at < datetime.now(timezone.utc):
         await db.guest_sessions.delete_one({"guest_token": guest_token})
         raise HTTPException(status_code=401, detail="Guest session expired")
-    
+
     return guest
 
 
@@ -404,28 +422,30 @@ async def link_guest_to_account(request: Request):
     body = await request.json()
     guest_token = body.get("guest_token")
     user_id = body.get("user_id")
-    
+
     if not guest_token or not user_id:
-        raise HTTPException(status_code=400, detail="guest_token and user_id required")
-    
+        raise HTTPException(
+            status_code=400, detail="guest_token and user_id required")
+
     # Get guest session
     guest = await db.guest_sessions.find_one({"guest_token": guest_token})
     if not guest:
         raise HTTPException(status_code=404, detail="Guest session not found")
-    
+
     guest_id = guest["guest_id"]
-    
+
     # Link all guest orders to the user
     result = await db.orders.update_many(
         {"guest_id": guest_id},
         {"$set": {"buyer_id": user_id, "linked_from_guest": True}}
     )
-    
+
     # Delete guest session
     await db.guest_sessions.delete_one({"guest_token": guest_token})
-    
-    logger.info(f"Linked {result.modified_count} guest orders to user {user_id}")
-    
+
+    logger.info(
+        f"Linked {result.modified_count} guest orders to user {user_id}")
+
     return {
         "message": f"Linked {result.modified_count} orders to your account",
         "orders_linked": result.modified_count

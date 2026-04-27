@@ -238,7 +238,6 @@ async def tma_auth(payload: TMAInitRequest):
             "telegram_username": tg_user.get("username"),
             "telegram_photo_url": tg_user.get("photo_url"),
             "full_name": f"{tg_user.get('first_name', '')} {tg_user.get('last_name', '')}".strip() or "Користувач",
-            "email": None,
             "phone": None,
             "role": "customer",
             "source": "telegram_tma",

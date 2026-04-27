@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -23,12 +23,12 @@ const AuthCallback = () => {
       try {
         // Get session_id from URL fragment
         const hash = window.location.hash;
-        const params = new URLSearchParams(hash.replace('#', ''));
-        const sessionId = params.get('session_id');
+        const params = new URLSearchParams(hash.replace("#", ""));
+        const sessionId = params.get("session_id");
 
         if (!sessionId) {
-          console.error('No session_id in URL');
-          navigate('/login', { replace: true });
+          console.error("No session_id in URL");
+          navigate("/login", { replace: true });
           return;
         }
 
@@ -36,7 +36,7 @@ const AuthCallback = () => {
         const response = await axios.post(
           `${API_URL}/api/v2/auth/google`,
           { session_id: sessionId },
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         const { user, access_token } = response.data;
@@ -44,31 +44,30 @@ const AuthCallback = () => {
         if (user) {
           // CRITICAL: Store user data in AuthContext AND localStorage
           setGoogleUser(user);
-          
+
           // Also store access_token for session management
           if (access_token) {
-            localStorage.setItem('session_token', access_token);
+            localStorage.setItem("session_token", access_token);
           }
-          
+
           // Check for saved return URL (from checkout)
-          const returnUrl = sessionStorage.getItem('checkout_return_url');
+          const returnUrl = sessionStorage.getItem("checkout_return_url");
           if (returnUrl) {
-            sessionStorage.removeItem('checkout_return_url');
+            sessionStorage.removeItem("checkout_return_url");
             navigate(returnUrl, { replace: true });
-          } else if (user.role === 'admin') {
-            navigate('/admin', { replace: true });
+          } else if (user.role === "admin") {
+            navigate("/admin", { replace: true });
           } else {
-            navigate('/', { replace: true });
+            navigate("/", { replace: true });
           }
         } else {
-          throw new Error('No user data received');
+          throw new Error("No user data received");
         }
-
       } catch (error) {
-        console.error('Auth callback error:', error);
-        navigate('/login', { 
-          replace: true, 
-          state: { error: 'Помилка авторизації. Спробуйте ще раз.' } 
+        console.error("Auth callback error:", error);
+        navigate("/login", {
+          replace: true,
+          state: { error: "Помилка авторизації. Спробуйте ще раз." },
         });
       }
     };

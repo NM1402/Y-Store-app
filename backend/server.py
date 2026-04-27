@@ -35,6 +35,17 @@ async def lifespan(app: FastAPI):
     logger.info("🚀 Starting Telegram Mini App backend...")
     # Создаём индексы
     try:
+        idx = await db.users.index_information()
+        if "email_1" in idx and (
+            not idx["email_1"].get("partialFilterExpression")
+            or not idx["email_1"].get("unique")
+        ):
+            await db.users.drop_index("email_1")
+        await db.users.create_index(
+            "email",
+            unique=True,
+            partialFilterExpression={"email": {"$type": "string"}},
+        )
         await db.users.create_index("id", unique=True)
         await db.users.create_index("telegram_id", sparse=True)
         await db.products.create_index("id", unique=True)

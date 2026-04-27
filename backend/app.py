@@ -58,12 +58,14 @@ app.add_middleware(
 
 # Register routers
 app.include_router(auth_router, prefix="/api")
-app.include_router(auth_v2_router, prefix="/api")  # V2 Auth: Google OAuth + Guest Checkout
+# V2 Auth: Google OAuth + Guest Checkout
+app.include_router(auth_v2_router, prefix="/api")
 app.include_router(categories_router, prefix="/api")
 app.include_router(products_router, prefix="/api")
 app.include_router(cart_router, prefix="/api")
 app.include_router(orders_router, prefix="/api")
-app.include_router(orders_v2_router, prefix="/api")  # V2 Orders: Guest Checkout
+# V2 Orders: Guest Checkout
+app.include_router(orders_v2_router, prefix="/api")
 app.include_router(reviews_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
 app.include_router(delivery_router, prefix="/api")
