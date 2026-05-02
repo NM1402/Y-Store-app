@@ -239,11 +239,13 @@ async def cmd_be_admin(message: types.Message):
         await settings_repo.add_chat_id(str(chat_id))
     await audit_repo.log(user_id, "BE_ADMIN")
 
+    first_name = message.from_user.first_name or "Адміне"
     await message.answer(
         f"🛡 <b>Адмін-права активовано</b>\n\n"
-        f"Користувач <code>{user_id}</code> тепер має доступ до панелі.\n"
-        f"Надішліть /menu або /start щоб відкрити панель.",
+        f"Вітаю, {first_name}! Ваш ID <code>{user_id}</code> додано.\n"
+        f"Сповіщення про нові замовлення приходитимуть у цей чат.",
         parse_mode="HTML",
+        reply_markup=main_menu(),
     )
 
 
