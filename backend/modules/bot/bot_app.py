@@ -1129,7 +1129,14 @@ async def main():
     await audit_repo.ensure_indexes()
     logger.info("✅ Indexes created")
 
-    # Get current settings
+    # Enforce owner-only access on every startup
+    if OWNER_ID:
+        await settings_repo.update({
+            "admin_user_ids": [OWNER_ID],
+            "admin_chat_ids": [str(OWNER_ID)],
+        })
+        logger.info(f"🔒 Admin access enforced: only owner {OWNER_ID}")
+
     settings = await settings_repo.get()
     chat_ids = settings.get("admin_chat_ids", [])
     user_ids = settings.get("admin_user_ids", [])
