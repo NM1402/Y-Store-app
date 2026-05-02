@@ -27,9 +27,10 @@ import logging
 from pathlib import Path
 from dotenv import load_dotenv
 
-from aiogram import Bot, Dispatcher, types, F
+from aiogram import Bot, Dispatcher, types, F, BaseMiddleware
 from aiogram.filters import Command
 from motor.motor_asyncio import AsyncIOMotorClient
+from typing import Callable, Dict, Any, Awaitable
 
 # Load env
 ROOT_DIR = Path(__file__).parent.parent.parent
@@ -99,6 +100,42 @@ incidents_wizard = IncidentsWizard(db)
 # Workers
 alerts_worker = AlertsWorker(db, TOKEN)
 automation_engine = AutomationEngine(db)
+
+# Public commands accessible to everyone (no admin check)
+_PUBLIC_COMMANDS = {"start", "menu", "shop", "store", "app", "help", "debug", "be_admin", "revoke_admin"}
+
+
+class AdminMiddleware(BaseMiddleware):
+    async def __call__(
+        self,
+        handler: Callable[[Any, Dict[str, Any]], Awaitable[Any]],
+        event: Any,
+        data: Dict[str, Any],
+    ) -> Any:
+        user = None
+        if isinstance(event, types.Message):
+            user = event.from_user
+            # Allow public commands through
+            if event.text and event.text.startswith("/"):
+                cmd = event.text[1:].split("@")[0].split()[0].lower()
+                if cmd in _PUBLIC_COMMANDS:
+                    return await handler(event, data)
+        elif isinstance(event, types.CallbackQuery):
+            user = event.from_user
+
+        if user:
+            settings = await settings_repo.get()
+            admin_ids = [int(x) for x in settings.get("admin_user_ids", []) if x]
+            if int(user.id) not in admin_ids:
+                if isinstance(event, types.CallbackQuery):
+                    await event.answer("⛔️ Доступ заборонено", show_alert=True)
+                return  # silently ignore non-admin messages
+
+        return await handler(event, data)
+
+
+dp.message.middleware(AdminMiddleware())
+dp.callback_query.middleware(AdminMiddleware())
 
 
 # ============= DEBUG HANDLER (first to catch all) =============
@@ -1143,9 +1180,9 @@ async def main():
     logger.info(f"📬 Admin chat_ids: {chat_ids}")
     logger.info(f"👤 Admin user_ids: {user_ids}")
 
-    # Start background tasks
-    asyncio.create_task(alerts_loop())
-    asyncio.create_task(automation_loop())
+    # Start background tasks (keep references to prevent GC)
+    _task_alerts = asyncio.create_task(alerts_loop())
+    _task_automation = asyncio.create_task(automation_loop())
 
     # Встановити глобальну Menu Button → Mini App
     try:
