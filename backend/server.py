@@ -70,6 +70,13 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Auto-seed failed: {e}")
 
+    try:
+        from modules.jobs.scheduler import start_jobs_scheduler
+        start_jobs_scheduler(db)
+        logger.info("✅ Jobs scheduler started")
+    except Exception as e:
+        logger.error(f"Jobs scheduler failed to start: {e}")
+
     yield
     logger.info("👋 Shutting down...")
 

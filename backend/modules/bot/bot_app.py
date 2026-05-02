@@ -62,6 +62,7 @@ logging.getLogger("httpcore").setLevel(logging.WARNING)
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.getenv("DB_NAME", "marketplace_db")
+OWNER_ID = int(os.getenv("TELEGRAM_OWNER_ID", "0"))
 
 if not TOKEN:
     raise ValueError("TELEGRAM_BOT_TOKEN not set in .env")
@@ -188,19 +189,12 @@ async def cmd_start(message: types.Message):
 
 @dp.message(Command("be_admin"))
 async def cmd_be_admin(message: types.Message):
-    """Активувати адмін-права (для першого запуску)"""
+    """Активувати адмін-права — тільки для власника"""
     user_id = message.from_user.id
     chat_id = message.chat.id
 
-    settings = await settings_repo.get()
-    admin_ids = settings.get("admin_user_ids", []) or []
-
-    # Якщо вже є адміни — тільки існуючі можуть додавати нових (лічильно)
-    if admin_ids and int(user_id) not in [int(x) for x in admin_ids if x]:
-        await message.answer(
-            "⛔️ Адмін-доступ уже конфігурований.\n"
-            "Зверніться до існуючого адміністратора.",
-        )
+    if OWNER_ID and int(user_id) != OWNER_ID:
+        await message.answer("⛔️ Ця команда доступна лише власнику бота.")
         return
 
     await settings_repo.add_user_id(user_id)
@@ -212,6 +206,29 @@ async def cmd_be_admin(message: types.Message):
         f"🛡 <b>Адмін-права активовано</b>\n\n"
         f"Користувач <code>{user_id}</code> тепер має доступ до панелі.\n"
         f"Надішліть /menu або /start щоб відкрити панель.",
+        parse_mode="HTML",
+    )
+
+
+@dp.message(Command("revoke_admin"))
+async def cmd_revoke_admin(message: types.Message):
+    """Відкликати адмін-права у користувача — тільки для власника"""
+    user_id = message.from_user.id
+
+    if OWNER_ID and int(user_id) != OWNER_ID:
+        await message.answer("⛔️ Ця команда доступна лише власнику бота.")
+        return
+
+    # Залишаємо тільки власника в admin_user_ids і admin_chat_ids
+    await settings_repo.update({
+        "admin_user_ids": [OWNER_ID],
+        "admin_chat_ids": [str(message.chat.id)],
+    })
+    await audit_repo.log(user_id, "REVOKE_ALL_ADMINS")
+
+    await message.answer(
+        "✅ <b>Доступ очищено</b>\n\n"
+        f"Єдиний адмін: <code>{OWNER_ID}</code>",
         parse_mode="HTML",
     )
 
